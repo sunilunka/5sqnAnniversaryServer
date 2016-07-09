@@ -8,6 +8,7 @@ var app = express();
 
 module.exports = app;
 
+/* Applies all configuration objects to the application including middleware (body-parser etc.)*/
 configuration(app);
 
 app.use("/api", routes);
