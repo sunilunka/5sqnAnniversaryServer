@@ -1,2 +1,2 @@
 node_modules
-server/app/configure/authentication
+server/app/configure/authentication/firebase_config.js
