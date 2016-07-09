@@ -1,0 +1,14 @@
+{
+  "name": "5sqn_anniversary_server",
+  "version": "1.0.0",
+  "description": "API server project for 5sqn_anniversary project",
+  "main": "server/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sunil Unka",
+  "license": "ISC"
+}
