@@ -6,11 +6,11 @@ var firebaseInit = require(path.join(__dirname, '../app/configure/authentication
 var DATABASE_URI = require(path.join(__dirname, '../env')).DATABASE_URI;
 
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
 var db = mongoose.connect(DATABASE_URI).connection;
 
-// Require our models -- these should register the model into mongoose
-// so the rest of the application can simply call mongoose.model('User')
-// anywhere the User model needs to be used.
+/* Require our models -- these should register the model into mongoose so the rest of the application can simply call mongoose.model('<modelName>') anywhere the required model needs to be used. */
 require('./models');
 
 var startDbPromise = new Promise(function (resolve, reject) {

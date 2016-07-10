@@ -7,15 +7,24 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha ./tests",
     "start": "nodemon --watch server ./server/main.js"
   },
   "author": "Sunil Unka",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.4.1",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "firebase": "^3.1.0",
     "mongoose": "^4.5.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "mocha-mongoose": "^1.2.0",
+    "sinon": "^1.17.4",
+    "supertest": "^1.2.0",
+    "supertext": "^1.0.0"
   }
 }
