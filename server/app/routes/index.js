@@ -3,21 +3,25 @@
 var express = require('express');
 
 var router = express.Router();
+var path = require('path');
+var fireDb = require(path.join(__dirname, '../../db/fire-db'));
+var env = require(path.join(__dirname, '../../env'))
 
-var firebase = require('firebase');
+router.use('/', function(req, res, next){
+  res.append('Access-Control-Allow-Origin', env.ACAO);
+  next();
+});
 
+router.use('/products', require('./product'))
 
 router.get('/', function(req, res, next){
   console.log("REQUEST: ", req.headers);
-  var db = firebase.database();
-  var attendeesRef = db.ref('/attendees');
+  var attendeesRef = fireDb.dbConnect().ref('/attendees');
   var attendees = "";
-  attendeesRef.on("value", function(snapshot){
+  attendeesRef.once("value")
+  .then(function(snapshot){
     attendees = snapshot.val();
     attendees = JSON.stringify(attendees)
-    res.set({
-      'Access-Control-Allow-Origin': '*'
-    })
     res.status(200).json(attendees);
   })
 })

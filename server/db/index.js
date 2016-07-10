@@ -20,8 +20,8 @@ var startDbPromise = new Promise(function (resolve, reject) {
 
 console.log(chalk.yellow('Opening connection to MongoDB . . .'));
 startDbPromise.then(function () {
+    /* Initiate the Firebase App to allow Firebase DB connections */
     firebaseInit();
-    console.log(chalk.bgYellow.black('Firebase connection established!'));
     console.log(chalk.green('MongoDB connection opened!'));
 });
 
