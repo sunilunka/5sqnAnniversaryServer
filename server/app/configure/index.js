@@ -1,7 +1,7 @@
 'use strict';
 
-var middleware = require('./middleware');
+var parsingMiddleware = require('./parsing-middleware');
 
 module.exports = function(app){
-  middleware(app)
+  parsingMiddleware(app)
 }

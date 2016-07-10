@@ -1,10 +1,9 @@
 'use strict';
 
 var bodyParser = require('body-parser');
-var firebaseInit = require('./authentication/firebase_config');
 
+/* Configure server to parse all incoming requests */
 module.exports = function(app){
-  firebaseInit();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
 }

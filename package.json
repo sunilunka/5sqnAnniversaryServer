@@ -2,13 +2,13 @@
   "name": "5sqn_anniversary_server",
   "version": "1.0.0",
   "description": "API server project for 5sqn_anniversary project",
-  "main": "server/index.js",
+  "main": "server/main.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch server ./server/app/index.js"
+    "start": "nodemon --watch server ./server/main.js"
   },
   "author": "Sunil Unka",
   "license": "ISC",
