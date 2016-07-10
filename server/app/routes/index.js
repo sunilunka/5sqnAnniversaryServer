@@ -14,18 +14,5 @@ router.use('/', function(req, res, next){
 
 router.use('/products', require('./product'))
 
-router.get('/', function(req, res, next){
-  console.log("REQUEST: ", req.headers);
-  var attendeesRef = fireDb.dbConnect().ref('/attendees');
-  var attendees = "";
-  attendeesRef.once("value")
-  .then(function(snapshot){
-    attendees = snapshot.val();
-    attendees = JSON.stringify(attendees)
-    res.status(200).json(attendees);
-  })
-})
-
-
 
 module.exports = router;

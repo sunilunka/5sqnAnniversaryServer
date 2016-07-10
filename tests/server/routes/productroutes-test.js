@@ -62,8 +62,11 @@ describe('Products Route', function () {
         })
         .end(function(err, res){
           if(err) return done(err);
-          expect(res.body.hasOwnProperty('_id')).to.equal(true);
-          done();
+          guestAgent.get('/api/products')
+          .end(function(err, res){
+            expect(res.body.length).to.equal(1);
+            done();
+          })
         })
 
       })
@@ -80,6 +83,8 @@ describe('Products Route', function () {
           done();
         })
       })
+
+
 
     })
   })
