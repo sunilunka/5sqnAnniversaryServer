@@ -175,7 +175,7 @@ describe('Products Route', function () {
 			.expect(200)
 			.end(function(err, res){
 				if(err) return done(err);
-				expect(res.body.variants[0]).to.have.all.keys('product_id', 'options', 'quantity', 'price');
+				expect(res.body.variants[0]).to.have.any.keys('product_id', 'options', 'quantity', 'price');
 				done();
 			})
 		})
