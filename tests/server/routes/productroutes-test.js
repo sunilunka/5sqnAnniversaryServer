@@ -2,7 +2,8 @@
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 require('../../../server/db/models');
-var User = mongoose.model('Product');
+var Product = mongoose.model('Product');
+var Variant = mongoose.model('Variant');
 
 var expect = require('chai').expect;
 
@@ -37,29 +38,29 @@ describe('Products Route', function () {
 				.end(done);
 		});
 
-    it('response should be an array with no entries', function(done){
+    it('should be an array', function(done){
       guestAgent.get('/api/products')
       .expect(200)
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.a('array');
-        expect(res.body.length, 'Array [res.body.length]').to.equal(0);
         done();
       })
     })
 
 	});
 
-  describe('POST /', function(){
+  describe('POST /new', function(){
 
-    describe('Product create', function(){
+    describe('Create new product', function(){
 
-      it('should create a product when a valid object is sent', function(done){
+      it('should add to database with valid object', function(done){
         guestAgent.post('/api/products/new')
         .send({
           title: '75th Anniversary T-shirt',
           description: 'Best t-shirt ever!'
         })
+				.expect(201)
         .end(function(err, res){
           if(err) return done(err);
           guestAgent.get('/api/products')
@@ -71,21 +72,65 @@ describe('Products Route', function () {
 
       })
 
-      it('should receive an error if no title is sent', function(done){
+      it('should receive an error if object does not have required key', function(done){
         guestAgent.post('/api/products/new')
         .send({
           description: "This product is great!"
         })
+				.expect(500)
         .end(function(err, res){
-          expect(res.status).to.equal(500);
+          // expect(res.status).to.equal(500);
           expect(res.hasOwnProperty('error')).to.equal(true);
           expect(res.error.text).to.equal('Product validation failed');
           done();
         })
       })
 
+			describe('when variants are specified', function(){
 
+				var productWithVariants = {
+					title: "T-shirt",
+					description: "A rad t-shirt",
+					options: {
+						size: ['XS', 'SM', 'M', 'L', 'XL'],
+						color: ['black', 'blue']
+					},
+					variants: [
+						{
+							options: {
+								size: 'L',
+								color: 'black'
+							},
+							quantity: 10,
+							price: 1000
+						},
+						{
+							options: {
+								size: 'SM',
+								color: 'blue'
+							},
+							quantity: 20,
+							price: 1000
+						}
+					]
+				}
 
+				it('should populate Variant collection', function(done){
+					guestAgent.post('/api/products/new')
+					.send(productWithVariants)
+					.expect(201)
+					.end(function(err, res){
+						if(err) return done(err);
+						Variant.where('product_id').equals(res.body._id)
+						.exec()
+						.then(function(result){
+							expect(result).to.have.length(2);
+							done();
+						})
+						.catch(done)
+					})
+				})
+			})
     })
   })
 

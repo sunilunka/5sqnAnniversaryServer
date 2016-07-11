@@ -4,17 +4,20 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var variantSchema = new Schema({
-  productId: {
+  product_id: {
     type: Schema.Types.ObjectId
   },
   options: {
-    type: String
+    type: {},
+    required: true
   },
   quantity: {
-    type: Number
+    type: Number,
+    required: true
   },
   price: {
-    type: Number
+    type: Number,
+    required: true
   }
 
 })

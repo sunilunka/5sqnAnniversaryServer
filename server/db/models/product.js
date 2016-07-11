@@ -14,7 +14,7 @@ var productSchema = new Schema({
   },
 
   options: {
-    type: String
+    type: {}
   },
 
   variants: {

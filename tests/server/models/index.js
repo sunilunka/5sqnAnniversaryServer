@@ -1,1 +1,2 @@
-require('./product-test.js')
+require('./product-test.js');
+require('./variant-test.js');
