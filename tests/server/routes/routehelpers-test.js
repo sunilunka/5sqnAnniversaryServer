@@ -2,7 +2,7 @@
 path = require('path');
 routeHelpers = require(path.join(__dirname, '../../../server/app/routes/route-helpers'));
 /* Instantiate models to check saving to db */
-
+// var _ = require('lodash');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 require('../../../server/db/models');
@@ -14,7 +14,7 @@ var expect = require('chai').expect;
 var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
 
-describe('Route Helpers', function(){
+describe('Route Helper Methods', function(){
 
   beforeEach('Establish DB connection', function(done){
     if(mongoose.connection.db) return done();
@@ -25,7 +25,7 @@ describe('Route Helpers', function(){
     clearDB(done);
   })
 
-  describe('processVariants function', function(){
+  describe('Product and Variant helper methods', function(){
 
     var productWithVariants = {
       title: "T-shirt",
@@ -66,30 +66,69 @@ describe('Route Helpers', function(){
       }
     ];
 
-    var processVariantsOutput;
+    describe('.processVariants()', function(){
 
-    beforeEach('run the target function', function(){
-      processVariantOutputs = routeHelpers.processVariants(testProduct, variants);
+      var processVariantsOutput;
+
+      it('should be a function', function(){
+        expect(routeHelpers.processVariants).to.be.a('function');
+      })
+
+      it('Should return an array', function(){
+        expect(routeHelpers.processVariants(testProduct, variants)).to.be.a('array');
+      })
+
+      it('Each object should have the parent product._id in the product_id field', function(){
+        expect(routeHelpers.processVariants(testProduct, variants)[1]).to.have.property('product_id', testProduct['_id']);
+      })
+
+      it('Should append the parent product price when no price is given', function(){
+        var variant = [{
+                options: {
+                  size: 'SM',
+                  color: 'blue'
+                },
+                quantity: 20
+              }]
+
+        expect(routeHelpers.processVariants(testProduct, variant)[0]).to.have.property('price', testProduct.price);
+      })
     })
 
-    it('Should return an array', function(){
-      expect(processVariantOutputs).to.be.a('array');
-    })
+    describe('.addVariantRefToParent()', function(){
 
-    it('Each object should have the test product id in the product_id field', function(){
-      expect(processVariantOutputs[1]).to.have.property('product_id', testProduct['_id']);
-    })
+      var referenceVars;
 
-    it('Should append the parent product price when no price is given', function(){
-      var variant = [{
-              options: {
-                size: 'SM',
-                color: 'blue'
-              },
-              quantity: 20
-            }]
+      beforeEach('seed db with variants', function(done){
+        var updatedVars = variants.map(function(variant){
+          variant.product_id = testProduct._id;
+          return variant;
+        })
 
-      expect(routeHelpers.processVariants(testProduct, variant)[0]).to.have.property('price', testProduct.price);
+        Variant.create(updatedVars)
+        .then(function(variants){
+          referenceVars = variants;
+          done();
+        })
+        .catch(done);
+      })
+
+      it('should be a function', function(){
+        expect(routeHelpers.addVariantRefToParent).to.be.a('function')
+      })
+
+      it('should populate variants array of parent product', function(done){
+
+        routeHelpers.addVariantRefToParent(testProduct, referenceVars)
+        testProduct.save()
+        .then(function(product){
+          expect(testProduct.variants.indexOf(referenceVars[1]._id)).to.equal(1);
+          done();
+        })
+        .catch(done);
+      })
+
+
     })
   })
 })

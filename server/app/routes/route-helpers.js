@@ -14,5 +14,11 @@ module.exports = {
       return variantObj;
     })
     return toStore;
+  },
+
+  addVariantRefToParent: function(parentProduct, variants){
+    variants.forEach(function(variant){
+      parentProduct.variants.addToSet(variant._id);
+    })
   }
 }

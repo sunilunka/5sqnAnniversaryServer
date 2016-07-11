@@ -17,9 +17,8 @@ var productSchema = new Schema({
     type: {}
   },
 
-  variants: {
-    type: [Schema.Types.ObjectId]
-  },
+  variants: [{ type: Schema.Types.ObjectId, ref: 'Variant'}],
+  
   quantity: {
     type: Number
   },

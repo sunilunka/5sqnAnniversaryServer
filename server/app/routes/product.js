@@ -29,6 +29,7 @@ router.post('/new', function(req, res, next){
       var processedVariants = routeHelpers.processVariants(product, variants);
       Variant.create(processedVariants)
       .then(function(created){
+        
         res.status(201).json(product);
       })
     } else {
