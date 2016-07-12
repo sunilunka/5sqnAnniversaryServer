@@ -93,7 +93,6 @@ router.put('/:productId/stock', function(req, res, next){
       res.status(304).json(stockAvailable);
     });
   }
-
   res.status(200).json(product);
 
 })

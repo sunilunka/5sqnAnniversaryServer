@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var modelHelpers = require('./model-helpers')
 
 var variantSchema = new Schema({
   product_id: {
@@ -21,5 +22,9 @@ var variantSchema = new Schema({
   }
 
 })
+
+variantSchema.methods.updateStock = function(operation, amount, cb){
+  return modelHelpers.updateStock.call(this, operation, amount, cb)
+}
 
 mongoose.model('Variant', variantSchema);

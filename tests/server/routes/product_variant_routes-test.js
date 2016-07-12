@@ -5,7 +5,12 @@ require('../../../server/db/models');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 
-var expect = require('chai').expect;
+var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+var expect = chai.expect;
+
+var sinon = require('sinon');
 
 var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
@@ -61,12 +66,20 @@ describe('Product variants route', function(){
     it('should create a new variant and append to product ref variants array')
   })
 
-  describe('GET /:variant_id', function(){
+  describe('GET /:variantId', function(){
     it('should return variant')
   })
 
-  describe('PUT /:variant_id', function(){
+  describe('PUT /:variantId', function(){
     it('should update the requested variant')
+  })
+
+  describe('DELETE /:variantId', function(){
+    it('should remove the specified variant')
+  })
+
+  describe('PUT /:variantId/stock', function(){
+    it('should ')
   })
 
 })

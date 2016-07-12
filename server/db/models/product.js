@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var modelHelpers = require('./model-helpers');
 
 var productSchema = new Schema({
   title: {
@@ -30,20 +31,7 @@ var productSchema = new Schema({
 })
 
 productSchema.methods.updateStock = function(operation, amount, cb){
-  var currentStock = this.stock;
-  var stockForRequest = 0;
-  if(operation === 'add'){
-   this.stock += amount;
-   return this.save();
- } else if(operation === 'subtract'){
-   if(currentStock - amount < 0){
-     stockForRequest = amount + (currentStock - amount);
-     return cb(stockForRequest);
-   } else {
-    this.stock -= amount;
-    return this.save()
-   }
-  }
+  return modelHelpers.updateStock.call(this, operation, amount, cb);
 }
 
 mongoose.model('Product', productSchema);
