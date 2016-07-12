@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var routeHelpers = require('./route-helpers');
+var _ = require('lodash');
 
 router.get('/', function(req, res, next){
   Product.find({}).exec()
@@ -44,7 +45,6 @@ router.post('/new', function(req, res, next){
 
 router.param('productId', function(req, res, next, id){
   Product.findById(id)
-  .populate('variants')
   .exec()
   .then(function(product){
     req.product = product;
@@ -53,7 +53,32 @@ router.param('productId', function(req, res, next, id){
 })
 
 router.get('/:productId', function(req, res, next){
-  res.status(200).json(req.product);
+  Product.findById(req.product._id)
+  .populate('variants')
+  .exec()
+  .then(function(product){
+    res.status(200).json(product);
+  })
+})
+
+router.put('/:productId', function(req, res, next){
+  _.assign(req.product, req.body);
+  req.product.save()
+  .then(function(updatedProduct){
+    res.status(201).json(updatedProduct);
+  })
+})
+
+router.delete('/:productId', function(req, res, next){
+  var idToRemove = req.product._id;
+  Product.findByIdAndRemove(idToRemove)
+  .then(function(result){
+    return Variant.remove({ product_id: idToRemove })
+  })
+  .then(function(variantsRemoved){
+    res.status(204).json("The product and all variants have been removed.");
+  })
+
 })
 
 module.exports = router;

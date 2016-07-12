@@ -156,7 +156,7 @@ describe('Products Route', function () {
     })
   })
 
-	describe('GET /:product_id', function(){
+	describe('/:productId route', function(){
 
 		var testProduct;
 
@@ -170,16 +170,88 @@ describe('Products Route', function () {
 			})
 		})
 
-		it('should return the product with variants populated', function(done){
-			guestAgent.get('/api/products/' + testProduct._id)
-			.expect(200)
-			.end(function(err, res){
-				if(err) return done(err);
-				expect(res.body.variants[0]).to.have.any.keys('product_id', 'options', 'quantity', 'price');
-				done();
+		describe('GET /:productId', function(){
+			it('should return the product with variants populated', function(done){
+				guestAgent.get('/api/products/' + testProduct._id)
+				.expect(200)
+				.end(function(err, res){
+					if(err) return done(err);
+					expect(res.body.variants[0]).to.have.any.keys('product_id', 'options', 'quantity', 'price');
+					done();
+				})
 			})
 		})
+
+
+		describe('PUT /:productId', function(){
+
+			var updateOne = {
+				title: 'An even better t-shirt!',
+				price: 1500
+			}
+
+			var updateOptions = {
+				options: {
+					size: ['XS', 'SM', 'M', 'L'],
+					color: ['black', 'blue', 'sand'],
+					sex: ['womens', 'mens']
+				}
+			}
+
+			it('should return the updated product', function(done){
+				guestAgent.put('/api/products/' + testProduct._id)
+				.send(updateOne)
+				.expect(201)
+				.end(function(err, res){
+					if(err) return done(err);
+					expect(res.body.title).to.equal(updateOne.title);
+					expect(res.body.price).to.equal(updateOne.price);
+					done()
+				})
+			})
+
+			it('should return updated options object', function(done){
+				guestAgent.put('/api/products/' + testProduct._id)
+				.send(updateOptions)
+				.expect(201)
+				.end(function(err, res){
+					if(err) return done(err);
+					for(var opt in res.body.options){
+						expect(res.body.options[opt]).to.deep.include.members(updateOptions.options[opt]);
+					}
+					done();
+				})
+			})
+
+		})
+
+		describe('DELETE /:product_id', function(){
+
+			it('should remove the product and all variants', function(done){
+				guestAgent.delete('/api/products/' + testProduct._id)
+				.expect(204)
+				.end(function(err, res){
+					if(err) return done(err);
+					Product.findById(testProduct._id)
+					.exec()
+					.then(function(result){
+						expect(result).to.be.null;
+						Variant.where('product_id')
+						.equals(testProduct._id)
+						.exec()
+						.then(function(variants){
+							expect(variants).to.have.length(0);
+							done();
+						})
+					})
+					.catch(done)
+				})
+			})
+
+		})
+
 	})
+
 
 	// describe('Authenticated request', function () {
   //
