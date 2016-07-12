@@ -35,35 +35,64 @@ describe('Product variants route', function(){
     guestAgent = supertest.agent(app);
   });
 
-  var productWithVariants = {
-    title: "T-shirt",
-    description: "A rad t-shirt",
-    options: {
-      size: ['XS', 'SM', 'M', 'L', 'XL'],
-      color: ['black', 'blue']
-    },
-    variants: [
-      {
-        options: {
-          size: 'L',
-          color: 'black'
-        },
-        quantity: 10,
-        price: 1000
-      },
-      {
-        options: {
-          size: 'SM',
-          color: 'blue'
-        },
-        quantity: 20,
-        price: 1000
+  var testProduct;
+
+  beforeEach('Create dummy product and variant', function(done){
+    Product.create({
+      title: "T-shirt",
+      description: "A rad t-shirt",
+      options: {
+        size: ['XS', 'SM', 'M', 'L', 'XL'],
+        color: ['black', 'blue']
       }
-    ]
+    })
+    .then(function(product){
+      testProduct = product;
+      done();
+    })
+    .catch(done);
+  })
+
+  var rawVariant = {
+    options: {
+      size: 'SM',
+      color: 'blue'
+    },
+    stock: 20,
+    price: 1000
   }
 
   describe('POST /', function(){
-    it('should create a new variant and append to product ref variants array')
+
+    it('should create a new variant', function(done){
+      rawVariant.product_id = testProduct._id;
+      guestAgent.post('/api/products/' + testProduct._id + '/variants')
+      .send(rawVariant)
+      .expect(201)
+      .end(function(err, res){
+        if(err) return done(err);
+        expect(res.body).to.have.property('_id');
+        done();
+      })
+    })
+
+    it('should add _id to product variants array', function(done){
+      rawVariant.product_id = testProduct._id;
+      guestAgent.post('/api/products/' + testProduct._id + '/variants')
+      .send(rawVariant)
+      .expect(201)
+      .end(function(err, res){
+        if(err) return done(err);
+        Product.findById(res.body.product_id)
+        .then(function(product){
+          expect(product.variants).to.include(res.body._id);
+          done();
+        })
+      })
+    })
+
+    it('should add any new option and/or key-value pair to product')
+
   })
 
   describe('GET /:variantId', function(){
@@ -74,12 +103,13 @@ describe('Product variants route', function(){
     it('should update the requested variant')
   })
 
-  describe('DELETE /:variantId', function(){
-    it('should remove the specified variant')
-  })
 
   describe('PUT /:variantId/stock', function(){
     it('should ')
+  })
+
+  describe('DELETE /:variantId', function(){
+    it('should remove the specified variant')
   })
 
 })

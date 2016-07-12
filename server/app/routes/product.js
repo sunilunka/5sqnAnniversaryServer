@@ -84,17 +84,25 @@ router.put('/:productId/stock', function(req, res, next){
 
   var product = req.product;
   if(req.body['addStock']){
-    product.updateStock('add', req.body.addStock);
+    product.updateStock('add', req.body.addStock)
+    .then(function(updatedProduct){
+      res.status(200).json(updatedProduct);
+    })
   }
 
   if(req.body['subtractStock']){
-    product.updateStock('subtract', req.body.subtractStock, function(stockAvailable){
-      if(!stockAvailable) return;
-      res.status(304).json(stockAvailable);
-    });
+    product.updateStock('subtract', req.body.subtractStock)
+    .then(function(result){
+      if(result['nostock']){
+        res.status(200).json(result)
+      } else {
+        res.status(200).json(result);
+      }
+    })
   }
-  res.status(200).json(product);
-
 })
+
+router.use('/:productId/variants', require('./variant'));
+
 
 module.exports = router;

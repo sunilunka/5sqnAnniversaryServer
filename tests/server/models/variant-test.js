@@ -78,7 +78,7 @@ describe('Variant model', function () {
         expect(testVariant.updateStock).to.be.a('function');
       })
 
-      it('should return a promise when the update is successful', function(){
+      it('should return a promise', function(){
         return expect(testVariant.updateStock('subtract', 5)).to.eventually.be.fulfilled;
 
       })
@@ -94,19 +94,11 @@ describe('Variant model', function () {
         return expect(testVariant.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
       })
 
-      it('should run the callback if an update will decrement stock to negative numbers', function(){
-        var callback = sinon.spy();
-
-        testVariant.updateStock('subtract', 30, callback)
-        expect(callback.called).to.be.ok;
-      })
-
-      it('callback should return number of items actually available', function(){
-        var originalStock = testVariant.stock;
-        testVariant.updateStock('subtract', 69, function(stockLeft){
-          expect(stockLeft).to.equal(originalStock);
-        });
-
+      it('should return object with current stock, and prop nostock if subtract is more than available', function(){
+        return expect(testVariant.updateStock('subtract', 69)).to.eventually.eql({
+          nostock: true,
+          stock: 10
+        })
       })
 
     })

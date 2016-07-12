@@ -5,7 +5,10 @@ require('../../../server/db/models');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 
-var expect = require('chai').expect;
+var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+var expect = chai.expect;
 
 var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
@@ -283,6 +286,19 @@ describe('Products Route', function () {
 						done();
 					})
 					.catch(done);
+				})
+			})
+
+			it('should return the available stock when too many are subtracted', function(done){
+				guestAgent.put('/api/products/' + testProduct._id + '/stock')
+				.send({
+					subtractStock: 15
+				})
+				.expect(200)
+				.end(function(err, res){
+					if(err) return done(err);
+					expect(res.body).to.have.property('nostock', true);
+					done();
 				})
 			})
 

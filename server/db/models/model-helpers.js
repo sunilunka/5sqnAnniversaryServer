@@ -3,16 +3,22 @@
 module.exports = {
   updateStock: function(operation, amount, cb){
     var currentStock = this.stock;
+    var self = this;
     if(operation === 'add'){
-     this.stock += amount;
-     return this.save();
+     self.stock += amount;
+     return self.save();
     } else if(operation === 'subtract'){
-     if(currentStock - amount < 0){
-       return cb(currentStock);
-     } else {
-      this.stock -= amount;
-      return this.save()
-     }
+      return new Promise(function(resolve, reject){
+        if(currentStock - amount < 0){
+          resolve({
+           nostock: true,
+           stock: currentStock
+          })
+        } else {
+          self.stock -= amount;
+          resolve(self.save())
+        }
+      })
     }
   }
 }

@@ -62,7 +62,7 @@ describe('Product model', function () {
         expect(testProduct.updateStock).to.be.a('function');
       })
 
-      it('should return a promise when the update is successful', function(){
+      it('should return a promise', function(){
         return expect(testProduct.updateStock('subtract', 5)).to.eventually.be.fulfilled;
 
       })
@@ -78,22 +78,12 @@ describe('Product model', function () {
         return expect(testProduct.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
       })
 
-      it('should run the callback if an update will decrement stock to negative numbers', function(){
-        var callback = sinon.spy();
-
-        testProduct.updateStock('subtract', 30, callback)
-        expect(callback.called).to.be.ok;
+      it('should return object with current stock, and prop nostock if subtract is more than available', function(){
+        return expect(testProduct.updateStock('subtract', 69))       .to.eventually.eql({
+          nostock: true,
+          stock: 10
+        })
       })
-
-      it('callback should return number of items actually available', function(){
-        var originalStock = testProduct.stock;
-        testProduct.updateStock('subtract', 69, function(stockLeft){
-          expect(stockLeft).to.equal(originalStock);
-        });
-
-      })
-
     })
   })
-
 });
