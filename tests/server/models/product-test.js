@@ -2,7 +2,10 @@ var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
 
 var sinon = require('sinon');
-var expect = require('chai').expect;
+var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+var expect = chai.expect;
 var mongoose = require('mongoose');
 
 // Require in all models.
@@ -16,12 +19,81 @@ describe('Product model', function () {
     mongoose.connect(dbURI, done);
   });
 
+  var testProduct;
+
+  beforeEach('Create a dummy product', function(done){
+    Product.create({
+      title: 'P-8 Poseidon',
+      description: 'Bad-ass sub hunting aircraft',
+      stock: 10
+    })
+    .then(function(product){
+      testProduct = product;
+      done();
+    })
+    .catch(done);
+  })
+
   afterEach('Clear test database', function (done) {
       clearDB(done);
   });
 
   it('should exist', function(){
     expect(Product).to.be.a('function');
+  })
+
+  describe('quantity management', function(){
+
+    it('should throw a validation error if stock will go below zero', function(done){
+      testProduct.stock = (testProduct.stock - 12)
+      testProduct.save()
+      .catch(function(err){
+        expect(err.errors.stock.message).to.equal('No stock available');
+        done();
+      });
+    })
+  })
+
+  describe('instance methods', function(){
+
+    describe('Product#updateStock', function(){
+
+      it('should have a method .updateStock()', function(){
+        expect(testProduct.updateStock).to.be.a('function');
+      })
+
+      it('should return a promise when the update is successful', function(){
+        return expect(testProduct.updateStock('subtract', 5)).to.eventually.be.fulfilled;
+
+      })
+
+      it('should increase stock when "add" is the first argument', function(){
+        var originalStock = testProduct.stock;
+        return expect(testProduct.updateStock('add', 5)).to.eventually.have.property('stock', originalStock + 5);
+      })
+
+      it('should decrease stock when "subtract" is the first argument', function(){
+        var originalStock = testProduct.stock;
+
+        return expect(testProduct.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
+      })
+
+      it('should run the callback if an update will decrement stock to negative numbers', function(){
+        var callback = sinon.spy();
+
+        testProduct.updateStock('subtract', 30, callback)
+        expect(callback.called).to.be.ok;
+      })
+
+      it('callback should return number of items actually available', function(){
+        var originalStock = testProduct.stock;
+        testProduct.updateStock('subtract', 69, function(stockLeft){
+          expect(stockLeft).to.equal(originalStock);
+        });
+
+      })
+
+    })
   })
 
 });

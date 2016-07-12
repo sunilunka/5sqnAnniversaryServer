@@ -43,7 +43,7 @@ describe('Products Route', function () {
 					size: 'L',
 					color: 'black'
 				},
-				quantity: 10,
+				stock: 10,
 				price: 1000
 			},
 			{
@@ -51,10 +51,11 @@ describe('Products Route', function () {
 					size: 'SM',
 					color: 'blue'
 				},
-				quantity: 20,
+				stock: 20,
 				price: 1000
 			}
-		]
+		],
+		stock: 10
 	}
 
 	describe('GET /', function () {
@@ -176,7 +177,7 @@ describe('Products Route', function () {
 				.expect(200)
 				.end(function(err, res){
 					if(err) return done(err);
-					expect(res.body.variants[0]).to.have.any.keys('product_id', 'options', 'quantity', 'price');
+					expect(res.body.variants[0]).to.have.any.keys('product_id', 'options', 'stock', 'price');
 					done();
 				})
 			})
@@ -187,7 +188,8 @@ describe('Products Route', function () {
 
 			var updateOne = {
 				title: 'An even better t-shirt!',
-				price: 1500
+				price: 1500,
+				stock: 19
 			}
 
 			var updateOptions = {
@@ -206,7 +208,7 @@ describe('Products Route', function () {
 					if(err) return done(err);
 					expect(res.body.title).to.equal(updateOne.title);
 					expect(res.body.price).to.equal(updateOne.price);
-					done()
+					done();
 				})
 			})
 
@@ -222,7 +224,6 @@ describe('Products Route', function () {
 					done();
 				})
 			})
-
 		})
 
 		describe('DELETE /:product_id', function(){
@@ -247,38 +248,45 @@ describe('Products Route', function () {
 					.catch(done)
 				})
 			})
+		})
+
+		describe('PUT /:productId/stock', function(){
+
+			it('should "add" to product stock when specified in request', function(done){
+				guestAgent.put('/api/products/' + testProduct._id + '/stock')
+				.send({
+					addStock: 20
+				})
+				.expect(200)
+				.end(function(err, res){
+					if(err) return done(err);
+					Product.findById(res.body._id)
+					.then(function(product){
+						expect(product.stock).to.equal(30);
+						done();
+					})
+					.catch(done);
+				})
+			})
+
+			it('should "subtract" from product stock when specified in request', function(done){
+				guestAgent.put('/api/products/' + testProduct._id + '/stock')
+				.send({
+					subtractStock: 5
+				})
+				.expect(200)
+				.end(function(err, res){
+					if(err) return done(err);
+					Product.findById(res.body._id)
+					.then(function(product){
+						expect(product.stock).to.equal(5);
+						done();
+					})
+					.catch(done);
+				})
+			})
 
 		})
 
 	})
-
-
-	// describe('Authenticated request', function () {
-  //
-	// 	var loggedInAgent;
-  //
-	// 	var userInfo = {
-	// 		email: 'joe@gmail.com',
-	// 		password: 'shoopdawoop'
-	// 	};
-  //
-	// 	beforeEach('Create a user', function (done) {
-	// 		User.create(userInfo, done);
-	// 	});
-  //
-	// 	beforeEach('Create loggedIn user agent and authenticate', function (done) {
-	// 		loggedInAgent = supertest.agent(app);
-	// 		loggedInAgent.post('/login').send(userInfo).end(done);
-	// 	});
-  //
-	// 	it('should get with 200 response and with an array as the body', function (done) {
-	// 		loggedInAgent.get('/api/members/secret-stash').expect(200).end(function (err, response) {
-	// 			if (err) return done(err);
-	// 			expect(response.body).to.be.an('array');
-	// 			done();
-	// 		});
-	// 	});
-  //
-	// });
-
 });

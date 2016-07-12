@@ -78,6 +78,23 @@ router.delete('/:productId', function(req, res, next){
   .then(function(variantsRemoved){
     res.status(204).json("The product and all variants have been removed.");
   })
+})
+
+router.put('/:productId/stock', function(req, res, next){
+
+  var product = req.product;
+  if(req.body['addStock']){
+    product.updateStock('add', req.body.addStock);
+  }
+
+  if(req.body['subtractStock']){
+    product.updateStock('subtract', req.body.subtractStock, function(stockAvailable){
+      if(!stockAvailable) return;
+      res.status(304).json(stockAvailable);
+    });
+  }
+
+  res.status(200).json(product);
 
 })
 

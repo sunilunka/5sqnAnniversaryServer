@@ -53,7 +53,7 @@ describe('Route Helper Methods', function(){
           size: 'L',
           color: 'black'
         },
-        quantity: 10,
+        stock: 10,
         price: 1000
       },
       {
@@ -61,7 +61,7 @@ describe('Route Helper Methods', function(){
           size: 'SM',
           color: 'blue'
         },
-        quantity: 20,
+        stock: 20,
         price: 1000
       }
     ];
@@ -88,7 +88,7 @@ describe('Route Helper Methods', function(){
                   size: 'SM',
                   color: 'blue'
                 },
-                quantity: 20
+                stock: 20
               }]
 
         expect(routeHelpers.processVariants(testProduct, variant)[0]).to.have.property('price', testProduct.price);

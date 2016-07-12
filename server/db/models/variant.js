@@ -11,7 +11,7 @@ var variantSchema = new Schema({
     type: {},
     required: true
   },
-  quantity: {
+  stock: {
     type: Number,
     required: true
   },
