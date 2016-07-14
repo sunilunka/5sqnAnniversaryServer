@@ -30,6 +30,9 @@ var productSchema = new Schema({
   }
   imageURL: {
     type: String
+  },
+  imageName: {
+    type: String
   }
 })
 

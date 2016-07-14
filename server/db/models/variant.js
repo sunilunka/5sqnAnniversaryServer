@@ -22,6 +22,10 @@ var variantSchema = new Schema({
   }
   imageURL: {
     type: String
+  },
+
+  imageName: {
+    type: String
   }
 
 })
