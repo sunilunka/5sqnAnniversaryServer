@@ -12,7 +12,7 @@ module.exports = {
         if(currentStock - amount < 0){
           resolve({
            nostock: true,
-           stock: currentStock
+           product: self
           })
         } else {
           self.stock -= amount;

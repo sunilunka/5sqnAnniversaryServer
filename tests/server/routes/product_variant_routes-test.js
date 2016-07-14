@@ -105,7 +105,7 @@ describe('Product variants route', function(){
 
 
   describe('PUT /:variantId/stock', function(){
-    it('should ')
+    it('should update stock')
   })
 
   describe('DELETE /:variantId', function(){

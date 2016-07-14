@@ -28,6 +28,9 @@ var productSchema = new Schema({
   price: {
     type: Number
   }
+  imageURL: {
+    type: String
+  }
 })
 
 productSchema.methods.updateStock = function(operation, amount, cb){

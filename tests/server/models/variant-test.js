@@ -94,10 +94,10 @@ describe('Variant model', function () {
         return expect(testVariant.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
       })
 
-      it('should return object with current stock, and prop nostock if subtract is more than available', function(){
+      it('should return object with unmodified product, and prop nostock if subtract is more than available', function(){
         return expect(testVariant.updateStock('subtract', 69)).to.eventually.eql({
           nostock: true,
-          stock: 10
+          product: testVariant
         })
       })
 
