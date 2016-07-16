@@ -45,6 +45,7 @@ router.post('/new', function(req, res, next){
 
 router.param('productId', function(req, res, next, id){
   Product.findById(id)
+  .populate('variants')
   .exec()
   .then(function(product){
     req.product = product;
@@ -53,19 +54,23 @@ router.param('productId', function(req, res, next, id){
 })
 
 router.get('/:productId', function(req, res, next){
-  Product.findById(req.product._id)
-  .populate('variants')
-  .exec()
-  .then(function(product){
-    res.status(200).json(product);
-  })
+  res.status(200).json(req.product);
 })
 
 router.put('/:productId', function(req, res, next){
-  _.assign(req.product, req.body);
-  req.product.save()
-  .then(function(updatedProduct){
-    res.status(201).json(updatedProduct);
+  var updatedVariants = req.body.variants;
+  delete req.body.variants;
+  routeHelpers.checkVariantsOnUpdate(req.body, updatedVariants)
+  .then(function(updatedVariants){
+    var newVariantIds = updatedVariants.map(function(variant){
+      return variant._id;
+    })
+    _.assign(req.product, req.body);
+    req.product.variants = newVariantIds;
+    req.product.save()
+    .then(function(updatedProduct){
+      res.status(200).json(updatedProduct);
+    })
   })
 })
 

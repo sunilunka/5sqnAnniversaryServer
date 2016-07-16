@@ -206,7 +206,7 @@ describe('Products Route', function () {
 			it('should return the updated product', function(done){
 				guestAgent.put('/api/products/' + testProduct._id)
 				.send(updateOne)
-				.expect(201)
+				.expect(200)
 				.end(function(err, res){
 					if(err) return done(err);
 					expect(res.body.title).to.equal(updateOne.title);
@@ -218,13 +218,120 @@ describe('Products Route', function () {
 			it('should return updated options object', function(done){
 				guestAgent.put('/api/products/' + testProduct._id)
 				.send(updateOptions)
-				.expect(201)
+				.expect(200)
 				.end(function(err, res){
 					if(err) return done(err);
 					for(var opt in res.body.options){
 						expect(res.body.options[opt]).to.deep.include.members(updateOptions.options[opt]);
 					}
 					done();
+				})
+			})
+
+			describe('updates variants', function(){
+
+				var refProduct;
+
+				beforeEach('get current product and variants', function(done){
+					guestAgent.get('/api/products/' + testProduct._id)
+					.end(function(err, res){
+						if(err) return done(err);
+						refProduct = res.body;
+						done();
+					})
+				})
+
+				it('should update product variants', function(done){
+
+					refProduct.variants[0].stock = 30;
+					refProduct.variants[0].imageName = 'image.jpg';
+					refProduct.variants[0].imageURL = 'https://pics/image.jpg';
+
+					guestAgent.put('/api/products/' + testProduct._id)
+					.send(refProduct)
+					.expect(200)
+					.end(function(err, res){
+						if(err) return done(err);
+						var toCompare = res.body.variants[0];
+						Variant.findById(toCompare)
+						.then(function(variant){
+							expect(variant.stock).to.equal(30);
+							expect(variant.imageName).to.equal('image.jpg');
+							expect(variant.imageURL).to.equal('https://pics/image.jpg');
+							done();
+						})
+						.catch(done);
+					})
+				})
+
+				describe('remove variant(s) on update', function(){
+
+					var removedVariantId;
+
+					beforeEach('Remove variant from product', function(done){
+						removedVariantId = refProduct.variants[1]._id;
+						refProduct.variants.pop();
+
+						guestAgent.put('/api/products/' + testProduct._id)
+						.send(refProduct)
+						.expect(200)
+						.end(function(err, res){
+							if(err) return done(err);
+							done();
+						})
+					})
+
+					it('should remove variant(s) _id from parent product when not included in update', function(){
+						expect(refProduct.variants.indexOf(removedVariantId)).to.equal(-1);
+					})
+
+					it('should removes variant(s) from Variant collcection when not included in update', function(){
+						return expect(Variant.findById(removedVariantId)).to.eventually.be.null;
+					})
+				})
+
+				describe('adds variant(s) on update', function(){
+
+					var updatedProduct;
+
+					var newVariant = {
+						options: {
+							size: 'M',
+							color: 'black'
+						},
+						stock: 50,
+						price: 2500,
+						imageName: 'image.jpg',
+						imageURL: 'https://pic.com/image.jpg'
+					}
+
+					beforeEach('add new variant to product', function(done){
+
+						refProduct.variants.push(newVariant);
+
+						guestAgent.put('/api/products/' + testProduct._id)
+						.send(refProduct)
+						.expect(200)
+						.end(function(err, res){
+							if(err) return done(err);
+							updatedProduct = res.body;
+							done();
+						})
+					})
+
+					it('should add variant(s) _id to the parent product when included in update', function(){
+						expect(updatedProduct.variants.length).to.equal(3);
+					})
+
+					it('should add new variant(s) to the Variant collection when included in the update', function(){
+						return expect(Variant.find().where({
+							stock: 50,
+							price: 2500,
+							imageName: 'image.jpg',
+							imageURL: 'https://pic.com/image.jpg'})
+							.exec()).to.eventually.have.length(1);
+					})
+
 				})
 			})
 		})

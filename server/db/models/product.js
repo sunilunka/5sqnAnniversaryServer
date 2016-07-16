@@ -27,7 +27,7 @@ var productSchema = new Schema({
 
   price: {
     type: Number
-  }
+  },
   imageURL: {
     type: String
   },
