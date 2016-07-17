@@ -22,7 +22,7 @@ var productSchema = new Schema({
 
   stock: {
     type: Number,
-    min: [0, 'No stock available'],
+    min: [0, 'No stock available']
   },
 
   price: {

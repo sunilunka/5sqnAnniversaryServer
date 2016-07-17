@@ -62,54 +62,10 @@ describe('Product variants route', function(){
     price: 1000
   }
 
-  describe('POST /', function(){
-
-    it('should create a new variant', function(done){
-      rawVariant.product_id = testProduct._id;
-      guestAgent.post('/api/products/' + testProduct._id + '/variants')
-      .send(rawVariant)
-      .expect(201)
-      .end(function(err, res){
-        if(err) return done(err);
-        expect(res.body).to.have.property('_id');
-        done();
-      })
-    })
-
-    it('should add _id to product variants array', function(done){
-      rawVariant.product_id = testProduct._id;
-      guestAgent.post('/api/products/' + testProduct._id + '/variants')
-      .send(rawVariant)
-      .expect(201)
-      .end(function(err, res){
-        if(err) return done(err);
-        Product.findById(res.body.product_id)
-        .then(function(product){
-          expect(product.variants).to.include(res.body._id);
-          done();
-        })
-      })
-    })
-
-    it('should add any new option and/or key-value pair to product')
-
-  })
-
-  describe('GET /:variantId', function(){
-    it('should return variant')
-  })
-
-  describe('PUT /:variantId', function(){
-    it('should update the requested variant')
-  })
-
 
   describe('PUT /:variantId/stock', function(){
     it('should update stock')
   })
 
-  describe('DELETE /:variantId', function(){
-    it('should remove the specified variant')
-  })
 
 })

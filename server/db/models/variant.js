@@ -14,7 +14,8 @@ var variantSchema = new Schema({
   },
   stock: {
     type: Number,
-    required: true
+    required: true,
+    min: [0, 'No stock available']
   },
   price: {
     type: Number,
