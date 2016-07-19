@@ -91,13 +91,20 @@ router.put('/:productId', function(req, res, next){
 })
 
 router.delete('/:productId', function(req, res, next){
-  var idToRemove = req.body.product._id;
-  Product.findByIdAndRemove(idToRemove)
-  .then(function(result){
-    return Variant.remove({ product_id: idToRemove })
-  })
-  .then(function(variantsRemoved){
-    res.status(204).json("The product and all variants have been removed.");
+  fireMethods.checkAuthorisedManager(req.body['user_id'])
+  .then(function(authorised){
+    if(authorised){
+      var idToRemove = req.product._id;
+      Product.findByIdAndRemove(idToRemove)
+      .then(function(result){
+        return Variant.remove({ product_id: idToRemove })
+      })
+      .then(function(variantsRemoved){
+        res.status(204).json("The product and all variants have been removed.");
+      })
+    } else {
+      res.sendStatus(401);
+    }
   })
 })
 

@@ -414,12 +414,22 @@ describe('Products Route', function () {
 			})
 		})
 
-		xdescribe('DELETE /:product_id', function(){
+		describe('DELETE /:product_id', function(){
 
-			it('should return 403 status when user is not a manager')
+			it('should return 403 status when user is not a manager', function(done){
+				guestAgent.delete('/api/products/' + testProduct._id)
+				.expect(401)
+				.end(function(err, res){
+					if(err) return done(err);
+					done();
+				})
+			})
 
 			it('should remove the product and all variants', function(done){
 				guestAgent.delete('/api/products/' + testProduct._id)
+				.send({
+					user_id: testId
+				})
 				.expect(204)
 				.end(function(err, res){
 					if(err) return done(err);
