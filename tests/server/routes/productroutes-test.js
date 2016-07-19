@@ -102,7 +102,8 @@ describe('Products Route', function () {
 
 			var basicProduct = {
 				title: '75th Anniversary T-shirt',
-				description: 'Best t-shirt ever!'
+				description: 'Best t-shirt ever!',
+				price: "34.50"
 			}
 
 			it('should return 401 status when user is not a manager', function(done){
@@ -138,6 +139,7 @@ describe('Products Route', function () {
           guestAgent.get('/api/products')
           .end(function(err, res){
             expect(res.body.length).to.equal(1);
+						expect(res.body[0].price).to.equal(3450);
             done();
           })
         })

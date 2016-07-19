@@ -39,7 +39,6 @@ var productSchema = new Schema({
 
   price: {
     type: Number,
-    get: transformToString,
     set: transformToCents
   },
   imageURL: {
