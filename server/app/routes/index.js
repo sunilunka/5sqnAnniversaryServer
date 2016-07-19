@@ -9,10 +9,12 @@ var env = require(path.join(__dirname, '../../env'))
 
 router.use('/', function(req, res, next){
   res.append('Access-Control-Allow-Origin', env.ACAO);
+  res.append('Access-Control-Allow-Methods', env.ACAM);
   next();
 });
 
-router.use('/products', require('./product'))
+router.use('/products', require('./product'));
+router.use('/orders', require('./order'));
 
 
 module.exports = router;

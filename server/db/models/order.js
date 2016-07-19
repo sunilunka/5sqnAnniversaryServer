@@ -5,9 +5,13 @@ const Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
   ref: {
-    type: String,
+    type: Number,
     required: true
   },
+  ordered: {
+    type: Date
+    required: true
+  }
   updated: {
     type: Date,
     default: Date.now
