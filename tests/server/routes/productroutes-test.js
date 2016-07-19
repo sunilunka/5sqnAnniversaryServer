@@ -291,7 +291,7 @@ describe('Products Route', function () {
 				})
 			})
 
-			xdescribe('updates variants', function(){
+			describe('updates variants', function(){
 
 				var refProduct;
 
@@ -310,8 +310,13 @@ describe('Products Route', function () {
 					refProduct.variants[0].imageName = 'image.jpg';
 					refProduct.variants[0].imageURL = 'https://pics/image.jpg';
 
+					var body = {
+						user_id: testId,
+						product: refProduct
+					}
+
 					guestAgent.put('/api/products/' + testProduct._id)
-					.send(refProduct)
+					.send(body)
 					.expect(200)
 					.end(function(err, res){
 						if(err) return done(err);
@@ -327,7 +332,7 @@ describe('Products Route', function () {
 					})
 				})
 
-				xdescribe('remove variant(s) on update', function(){
+				describe('remove variant(s) on update', function(){
 
 					var removedVariantId;
 
@@ -335,8 +340,13 @@ describe('Products Route', function () {
 						removedVariantId = refProduct.variants[1]._id;
 						refProduct.variants.pop();
 
+						var body = {
+							user_id: testId,
+							product: refProduct
+						}
+
 						guestAgent.put('/api/products/' + testProduct._id)
-						.send(refProduct)
+						.send(body)
 						.expect(200)
 						.end(function(err, res){
 							if(err) return done(err);
@@ -353,7 +363,7 @@ describe('Products Route', function () {
 					})
 				})
 
-				xdescribe('adds variant(s) on update', function(){
+				describe('adds variant(s) on update', function(){
 
 					var updatedProduct;
 
@@ -372,8 +382,13 @@ describe('Products Route', function () {
 
 						refProduct.variants.push(newVariant);
 
+						var body = {
+							user_id: testId,
+							product: refProduct
+						}
+
 						guestAgent.put('/api/products/' + testProduct._id)
-						.send(refProduct)
+						.send(body)
 						.expect(200)
 						.end(function(err, res){
 							if(err) return done(err);
