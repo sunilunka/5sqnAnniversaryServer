@@ -4,6 +4,17 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var modelHelpers = require('./model-helpers');
 
+var transformToCents = function(value){
+  if(typeof value === 'Number'){
+    return value;
+  }
+  return parseFloat(value) * 100;
+}
+
+var transformToString = function(num){
+  return (num / 100).toFixed(2);
+}
+
 var productSchema = new Schema({
   title: {
     type: String,
@@ -22,17 +33,24 @@ var productSchema = new Schema({
 
   stock: {
     type: Number,
-    min: [0, 'No stock available']
+    min: [0, 'No stock available'],
+    default: 0
   },
 
   price: {
-    type: Number
+    type: Number,
+    get: transformToString,
+    set: transformToCents
   },
   imageURL: {
     type: String
   },
   imageName: {
     type: String
+  },
+  deliverable: {
+    type: Boolean,
+    default: false
   }
 })
 

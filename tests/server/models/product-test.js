@@ -25,7 +25,8 @@ describe('Product model', function () {
     Product.create({
       title: 'P-8 Poseidon',
       description: 'Bad-ass sub hunting aircraft',
-      stock: 10
+      stock: 10,
+      price: "1200.35"
     })
     .then(function(product){
       testProduct = product;
@@ -42,6 +43,18 @@ describe('Product model', function () {
     expect(Product).to.be.a('function');
   })
 
+  it('should have a default "deliverable" value of false', function(){
+    expect(testProduct.deliverable).to.be.false
+  })
+
+  it('should return a currency formatted string for price', function(){
+
+    var testRegex = /\d+\.\d{2}/g;
+
+    expect(testProduct.price).to.be.a('String');
+    expect(testRegex.test(testProduct.price)).to.be.ok;
+  })
+
   describe('quantity management', function(){
 
     it('should throw a validation error if stock will go below zero', function(done){
@@ -51,39 +64,6 @@ describe('Product model', function () {
         expect(err.errors.stock.message).to.equal('No stock available');
         done();
       });
-    })
-  })
-
-  describe('instance methods', function(){
-
-    describe('Product#updateStock', function(){
-
-      it('should have a method .updateStock()', function(){
-        expect(testProduct.updateStock).to.be.a('function');
-      })
-
-      it('should return a promise', function(){
-        return expect(testProduct.updateStock('subtract', 5)).to.eventually.be.fulfilled;
-
-      })
-
-      it('should increase stock when "add" is the first argument', function(){
-        var originalStock = testProduct.stock;
-        return expect(testProduct.updateStock('add', 5)).to.eventually.have.property('stock', originalStock + 5);
-      })
-
-      it('should decrease stock when "subtract" is the first argument', function(){
-        var originalStock = testProduct.stock;
-
-        return expect(testProduct.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
-      })
-
-      it('should return object with unmodified product, and prop nostock if subtract is more than available', function(){
-        return expect(testProduct.updateStock('subtract', 69))       .to.eventually.eql({
-          nostock: true,
-          product: testProduct
-        })
-      })
     })
   })
 });
