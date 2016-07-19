@@ -17,7 +17,7 @@ var fakeId = 'xh69GSClZ5XXGg4hFmhMZmH4b143';
 
 describe('Firebase dependent methods', function(){
   /* Interactions with firebase db commonly take longer than requests from local host, so increase timeout */
-  this.timeout(5000);
+  this.timeout(8000);
 
   before('Initiate Firebase app', function(){
     FirebaseInit();

@@ -16,6 +16,9 @@ var clearDB = require('mocha-mongoose')(dbURI);
 var supertest = require('supertest');
 var app = require('../../../server/app');
 
+var testId = 'I0cr7ykBtISiw4kO68sESRfTqTp1';
+var testIdNonManager = 'zj64GsClZ5YYGg4hFmhMZmG4b183';
+
 describe('Products Route', function () {
 
 	beforeEach('Establish DB connection', function (done) {
@@ -97,12 +100,38 @@ describe('Products Route', function () {
 
     describe('Create new product', function(){
 
+			var basicProduct = {
+				title: '75th Anniversary T-shirt',
+				description: 'Best t-shirt ever!'
+			}
+
+			it('should return 401 status when user is not a manager', function(done){
+
+				this.timeout(4000);
+
+				var body = {
+					user_id: testIdNonManager,
+					product: basicProduct
+				}
+
+				guestAgent.post('/api/products/new')
+				.send(body)
+				.expect(401)
+				.end(function(err, res){
+					if(err) return done(err);
+					done();
+				})
+			})
+
       it('should add to database with valid object', function(done){
+
+				var body = {
+					user_id: testId,
+					product: basicProduct
+				}
+
         guestAgent.post('/api/products/new')
-        .send({
-          title: '75th Anniversary T-shirt',
-          description: 'Best t-shirt ever!'
-        })
+        .send(body)
 				.expect(201)
         .end(function(err, res){
           if(err) return done(err);
@@ -112,14 +141,19 @@ describe('Products Route', function () {
             done();
           })
         })
-
       })
 
       it('should receive an error if object does not have required property', function(done){
+
+				var body = {
+					user_id: testId,
+					product: {
+						description: "This product is great"
+					}
+				}
+
         guestAgent.post('/api/products/new')
-        .send({
-          description: "This product is great!"
-        })
+        .send(body)
 				.expect(500)
         .end(function(err, res){
           expect(res.hasOwnProperty('error')).to.equal(true);
@@ -130,9 +164,14 @@ describe('Products Route', function () {
 
 			describe('when variants are specified', function(){
 
+				var body = {
+					user_id: testId,
+					product: productWithVariants
+				}
+
 				it('should populate Variant collection', function(done){
 					guestAgent.post('/api/products/new')
-					.send(productWithVariants)
+					.send(body)
 					.expect(201)
 					.end(function(err, res){
 						if(err) return done(err);
@@ -148,7 +187,7 @@ describe('Products Route', function () {
 
 				it('should populate parent product variant array', function(done){
 					guestAgent.post('/api/products/new')
-					.send(productWithVariants)
+					.send(body)
 					.expect(201)
 					.end(function(err, res){
 						if(err) return done(err);
@@ -166,7 +205,10 @@ describe('Products Route', function () {
 
 		beforeEach('create product', function(done){
 			guestAgent.post('/api/products/new')
-			.send(productWithVariants)
+			.send({
+				user_id: testId,
+				product: productWithVariants
+			})
 			.end(function(err, res){
 				if(err) return done(err);
 				testProduct = res.body;
@@ -203,9 +245,27 @@ describe('Products Route', function () {
 				}
 			}
 
+			it('shoud return a 401 when user is not a manager', function(done){
+				var body = {
+					user_id: testIdNonManager,
+					product: updateOne
+				}
+
+				guestAgent.put('/api/products/' + testProduct._id)
+				.send(body)
+				.expect(401)
+				.end(function(err, res){
+					if(err) return done(err);
+					done();
+				})
+			})
+
 			it('should return the updated product', function(done){
 				guestAgent.put('/api/products/' + testProduct._id)
-				.send(updateOne)
+				.send({
+					user_id: testId,
+					product: updateOne
+				})
 				.expect(200)
 				.end(function(err, res){
 					if(err) return done(err);
@@ -217,7 +277,10 @@ describe('Products Route', function () {
 
 			it('should return updated options object', function(done){
 				guestAgent.put('/api/products/' + testProduct._id)
-				.send(updateOptions)
+				.send({
+					user_id: testId,
+					product: updateOptions
+				})
 				.expect(200)
 				.end(function(err, res){
 					if(err) return done(err);
@@ -228,7 +291,7 @@ describe('Products Route', function () {
 				})
 			})
 
-			describe('updates variants', function(){
+			xdescribe('updates variants', function(){
 
 				var refProduct;
 
@@ -264,7 +327,7 @@ describe('Products Route', function () {
 					})
 				})
 
-				describe('remove variant(s) on update', function(){
+				xdescribe('remove variant(s) on update', function(){
 
 					var removedVariantId;
 
@@ -290,7 +353,7 @@ describe('Products Route', function () {
 					})
 				})
 
-				describe('adds variant(s) on update', function(){
+				xdescribe('adds variant(s) on update', function(){
 
 					var updatedProduct;
 
@@ -336,7 +399,9 @@ describe('Products Route', function () {
 			})
 		})
 
-		describe('DELETE /:product_id', function(){
+		xdescribe('DELETE /:product_id', function(){
+
+			it('should return 403 status when user is not a manager')
 
 			it('should remove the product and all variants', function(done){
 				guestAgent.delete('/api/products/' + testProduct._id)
@@ -359,57 +424,5 @@ describe('Products Route', function () {
 				})
 			})
 		})
-
-		describe('PUT /:productId/stock', function(){
-
-			it('should "add" to product stock when specified in request', function(done){
-				guestAgent.put('/api/products/' + testProduct._id + '/stock')
-				.send({
-					addStock: 20
-				})
-				.expect(200)
-				.end(function(err, res){
-					if(err) return done(err);
-					Product.findById(res.body._id)
-					.then(function(product){
-						expect(product.stock).to.equal(30);
-						done();
-					})
-					.catch(done);
-				})
-			})
-
-			it('should "subtract" from product stock when specified in request', function(done){
-				guestAgent.put('/api/products/' + testProduct._id + '/stock')
-				.send({
-					subtractStock: 5
-				})
-				.expect(200)
-				.end(function(err, res){
-					if(err) return done(err);
-					Product.findById(res.body._id)
-					.then(function(product){
-						expect(product.stock).to.equal(5);
-						done();
-					})
-					.catch(done);
-				})
-			})
-
-			it('should return the available stock when too many are subtracted', function(done){
-				guestAgent.put('/api/products/' + testProduct._id + '/stock')
-				.send({
-					subtractStock: 15
-				})
-				.expect(200)
-				.end(function(err, res){
-					if(err) return done(err);
-					expect(res.body).to.have.property('nostock', true);
-					done();
-				})
-			})
-
-		})
-
 	})
 });

@@ -1,11 +1,13 @@
 'use strict';
 
+var path = require('path');
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var routeHelpers = require('./route-helpers');
+var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var _ = require('lodash');
 
 router.get('/', function(req, res, next){
@@ -16,31 +18,38 @@ router.get('/', function(req, res, next){
 })
 
 router.post('/new', function(req, res, next){
-  var variants;
-  if(req.body.hasOwnProperty('variants')){
-    /* If req.body has the property variants, store in variable, then delete the property. This is because the variants are saved in the Variant collection and only their ObjectId are saved to the array. A cast error will result. Variants are populated on request for a specific product page. */
-    variants = req.body.variants;
-    delete req.body.variants;
-  } else {
-    variants = [];
-  }
-  Product.create(req.body)
-  .then(function(product){
-    if(variants.length){
-      var processedVariants = routeHelpers.processVariants(product, variants);
-      Variant.create(processedVariants)
-      .then(function(savedVariants){
-        routeHelpers.addVariantRefToParent(product, savedVariants);
-        return product.save();
-      })
+  fireMethods.checkAuthorisedManager(req.body['user_id'])
+  .then(function(authorised){
+    if(authorised){
+      var variants;
+      if(req.body.product.hasOwnProperty('variants')){
+        /* If req.body has the property variants, store in variable, then delete the property. This is because the variants are saved in the Variant collection and only their ObjectId are saved to the array. A cast error will result. Variants are populated on request for a specific product page. */
+        variants = req.body.product.variants;
+        delete req.body.product.variants;
+      } else {
+        variants = [];
+      }
+      Product.create(req.body.product)
       .then(function(product){
-        res.status(201).json(product);
+        if(variants.length){
+          var processedVariants = routeHelpers.processVariants(product, variants);
+          Variant.create(processedVariants)
+          .then(function(savedVariants){
+            routeHelpers.addVariantRefToParent(product, savedVariants);
+            return product.save();
+          })
+          .then(function(product){
+            res.status(201).json(product);
+          })
+        } else {
+          res.status(201).json(product);
+        }
       })
+      .catch(next)
     } else {
-      res.status(201).json(product);
+      res.sendStatus(401);
     }
   })
-  .catch(next)
 })
 
 router.param('productId', function(req, res, next, id){
@@ -58,24 +67,31 @@ router.get('/:productId', function(req, res, next){
 })
 
 router.put('/:productId', function(req, res, next){
-  var updatedVariants = req.body.variants;
-  delete req.body.variants;
-  routeHelpers.checkVariantsOnUpdate(req.body, updatedVariants)
-  .then(function(updatedVariants){
-    var newVariantIds = updatedVariants.map(function(variant){
-      return variant._id;
-    })
-    _.assign(req.product, req.body);
-    req.product.variants = newVariantIds;
-    req.product.save()
-    .then(function(updatedProduct){
-      res.status(200).json(updatedProduct);
-    })
+  fireMethods.checkAuthorisedManager(req.body['user_id'])
+  .then(function(authorised){
+    if(authorised){
+      var updatedVariants = req.body.product.variants;
+      delete req.body.product.variants;
+      routeHelpers.checkVariantsOnUpdate(req.body.product, updatedVariants)
+      .then(function(updatedVariants){
+        var newVariantIds = updatedVariants.map(function(variant){
+          return variant._id;
+        })
+        _.assign(req.product, req.body.product);
+        req.product.variants = newVariantIds;
+        req.product.save()
+        .then(function(updatedProduct){
+          res.status(200).json(updatedProduct);
+        })
+      })
+    } else {
+      res.sendStatus(401);
+    }
   })
 })
 
 router.delete('/:productId', function(req, res, next){
-  var idToRemove = req.product._id;
+  var idToRemove = req.body.product._id;
   Product.findByIdAndRemove(idToRemove)
   .then(function(result){
     return Variant.remove({ product_id: idToRemove })
