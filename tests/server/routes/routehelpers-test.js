@@ -34,7 +34,7 @@ describe('Route Helper Methods', function(){
         size: ['XS', 'SM', 'M', 'L', 'XL'],
         color: ['black', 'blue']
       },
-      price: 1000
+      price: "10.00"
     }
 
     var testProduct;
@@ -54,7 +54,7 @@ describe('Route Helper Methods', function(){
           color: 'black'
         },
         stock: 10,
-        price: 1000
+        price: "10.00"
       },
       {
         options: {
@@ -62,7 +62,7 @@ describe('Route Helper Methods', function(){
           color: 'blue'
         },
         stock: 20,
-        price: 1000
+        price: "10.00"
       }
     ];
 
@@ -91,7 +91,7 @@ describe('Route Helper Methods', function(){
                 stock: 20
               }]
 
-        expect(routeHelpers.processVariants(testProduct, variant)[0]).to.have.property('price', testProduct.price);
+        expect(routeHelpers.processVariants(testProduct, variant)[0]).to.have.property('price', '10.00');
       })
     })
 
@@ -127,8 +127,6 @@ describe('Route Helper Methods', function(){
         })
         .catch(done);
       })
-
-
     })
   })
 })

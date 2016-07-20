@@ -4,6 +4,11 @@ var mongoose = require('mongoose');
 var Variant = mongoose.model('Variant');
 var _ = require('lodash');
 
+var convertPriceToString = function(num){
+  console.log("CALLED WITH NUMBER: ", num, typeof (num / 100).toFixed(2));
+  return (num / 100).toFixed(2);
+}
+
 module.exports = {
   processVariants: function(parentProduct, variantArray){
     /* Append product_id field to the variant for storage */

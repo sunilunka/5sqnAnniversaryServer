@@ -28,7 +28,8 @@ describe('Variant model', function () {
     expect(Variant).to.be.a('function');
   })
 
-  describe('instance methods', function(){
+
+  describe('instance and virtual methods', function(){
 
     var testProduct;
     var testVariant;
@@ -52,7 +53,7 @@ describe('Variant model', function () {
     					color: 'black'
     				},
     				stock: 10,
-    				price: 1000
+    				price: '10.00'
     			},
     			{
             product_id: product._id,
@@ -61,7 +62,7 @@ describe('Variant model', function () {
     					color: 'blue'
     				},
     				stock: 20,
-    				price: 1000
+    				price: '10.00'
     			}
     		]).
         then(function(variants){

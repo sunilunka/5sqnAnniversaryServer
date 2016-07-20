@@ -47,14 +47,6 @@ describe('Product model', function () {
     expect(testProduct.deliverable).to.be.false
   })
 
-  it('should return a currency formatted string for price', function(){
-
-    var testRegex = /\d+\.\d{2}/g;
-
-    expect(testProduct.price).to.be.a('String');
-    expect(testRegex.test(testProduct.price)).to.be.ok;
-  })
-
   describe('quantity management', function(){
 
     it('should throw a validation error if stock will go below zero', function(done){

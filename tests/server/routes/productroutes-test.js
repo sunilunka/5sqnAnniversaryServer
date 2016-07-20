@@ -139,7 +139,7 @@ describe('Products Route', function () {
           guestAgent.get('/api/products')
           .end(function(err, res){
             expect(res.body.length).to.equal(1);
-						expect(res.body[0].price).to.equal(3450);
+						expect(res.body[0].price).to.equal('34.50');
             done();
           })
         })
@@ -235,7 +235,7 @@ describe('Products Route', function () {
 
 			var updateOne = {
 				title: 'An even better t-shirt!',
-				price: "15.00",
+				price: '15.00',
 				stock: 19
 			}
 
@@ -247,7 +247,7 @@ describe('Products Route', function () {
 				}
 			}
 
-			it('shoud return a 401 when user is not a manager', function(done){
+			it('should return a 401 when user is not a manager', function(done){
 				var body = {
 					user_id: testIdNonManager,
 					product: updateOne
@@ -273,7 +273,7 @@ describe('Products Route', function () {
 					if(err) return done(err);
 					expect(res.body.title).to.equal(updateOne.title);
 					/* NOTE:  Saves and finds return the number value, and do not trigger the 'getter' */
-					expect(res.body.price).to.equal(parseFloat(updateOne.price)* 100);
+					expect(res.body.price).to.equal(updateOne.price);
 					done();
 				})
 			})
@@ -407,7 +407,7 @@ describe('Products Route', function () {
 					it('should add new variant(s) to the Variant collection when included in the update', function(){
 						return expect(Variant.find().where({
 							stock: 50,
-							/* Price getter not triggered on saves or finds. */
+							/* Looking for raw price, not string price */
 							price: 2500,
 							imageName: 'image.jpg',
 							imageURL: 'https://pic.com/image.jpg'})

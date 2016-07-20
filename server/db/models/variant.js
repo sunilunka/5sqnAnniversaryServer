@@ -4,17 +4,6 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var modelHelpers = require('./model-helpers')
 
-var transformToCents = function(value){
-  if(typeof value === 'Number'){
-    return value;
-  }
-  return parseFloat(value) * 100;
-}
-
-var transformToString = function(num){
-  return (num / 100).toFixed(2);
-}
-
 var variantSchema = new Schema({
   product_id: {
     type: Schema.Types.ObjectId
@@ -32,8 +21,8 @@ var variantSchema = new Schema({
   price: {
     type: Number,
     required: true,
-    get: transformToString,
-    set: transformToCents
+    get: modelHelpers.transformToString,
+    set: modelHelpers.transformToCents
   },
   imageURL: {
     type: String
@@ -44,6 +33,14 @@ var variantSchema = new Schema({
   }
 
 })
+
+variantSchema.set('toJSON', {
+  getters: true
+});
+
+variantSchema.set('toObject', {
+  getters: true
+});
 
 variantSchema.methods.updateStock = function(operation, amount, cb){
   return modelHelpers.updateStock.call(this, operation, amount, cb)
