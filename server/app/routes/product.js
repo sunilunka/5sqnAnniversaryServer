@@ -78,6 +78,7 @@ router.put('/:productId', function(req, res, next){
           return variant._id;
         })
         _.assign(req.product, req.body.product);
+        /* Need to work on logic for removing an image in total from a product or variant. Can change, but not remove at this time. */
         req.product.variants = newVariantIds;
         req.product.save()
         .then(function(updatedProduct){
