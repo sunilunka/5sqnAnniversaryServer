@@ -43,6 +43,7 @@ firebaseRefs.getEmailAssociatedUser = function(emailAddress){
     var result = childSnap.val();
     var userId;
     if(result){
+      console.log("RESULT: ", result);
       userId = Object.keys(result)[0];
       return userId;
     } else {

@@ -1,16 +1,48 @@
 'use strict';
 
 var mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 var lineItemSchema = new Schema({
-
+  product_id: {
+    type: String,
+    required: true
+  },
+  variant_id: {
+    type: String
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  display_options: {
+    type: String
+  },
+  quantity: {
+    type: Number,
+    required: true
+  },
+  subtotal: {
+    type: String,
+    required: true
+  },
+  deliverable: {
+    type: Boolean
+  },
+  imageURL: {
+    type: String
+  },
+  options: {
+    type: Schema.Types.Mixed
+  }
 })
 
 var orderSchema = new Schema({
-  ref: {
+  order_ref: {
     type: Number,
-    required: true
+    required: true,
+    unique: true
   },
   email: {
     type: String,
@@ -34,7 +66,7 @@ var orderSchema = new Schema({
   },
   paymentType: {
     type: String,
-    required: true
+    required: true,
     enum: ['cash', 'deposit'],
   },
   paymentState: {
@@ -48,7 +80,7 @@ var orderSchema = new Schema({
     required: true,
     enum: ['processing', 'packaged', 'dispatched', 'delivered', 'ready', 'collected'],
     default: 'processing'
-  }
+  },
   trackingData: {
     type: String
   },
@@ -57,19 +89,26 @@ var orderSchema = new Schema({
   },
   address: {
     type: Schema.Types.Mixed
-  }
+  },
   user_id: {
     type: String
-  }
-  order_date: {
+  },
+  created_at: {
     type: Date,
     required: true,
     default: Date.now
-  }
-  updated: {
+  },
+  updated_at: {
     type: Date,
     default: Date.now
   }
 })
+
+// orderSchema.plugin(autoIncrement.plugin, {
+//   model: 'Order',
+//   field: 'order_ref',
+//   startAt: 5000,
+//   incrementBy: 1
+// })
 
 mongoose.model('Order', orderSchema);

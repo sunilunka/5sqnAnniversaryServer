@@ -6,7 +6,9 @@ var firebaseInit = require(path.join(__dirname, '../app/configure/authentication
 var DATABASE_URI = require(path.join(__dirname, '../env')).DATABASE_URI;
 
 var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
 mongoose.Promise = require('bluebird');
+
 
 var db = mongoose.connect(DATABASE_URI).connection;
 
@@ -19,7 +21,7 @@ var startDbPromise = new Promise(function (resolve, reject) {
 });
 
 console.log(chalk.yellow('Opening connection to MongoDB . . .'));
-startDbPromise.then(function () {
+startDbPromise.then(function (db) {
     /* Initiate the Firebase App to allow Firebase DB connections */
     firebaseInit();
     console.log(chalk.green('MongoDB connection opened!'));

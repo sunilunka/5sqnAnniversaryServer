@@ -10,3 +10,17 @@ var mongoose = require('mongoose');
 
 // Require in all models.
 require('../../../server/db/models');
+
+var Order = mongoose.model('Order');
+
+describe('Order Model', function(){
+
+  beforeEach('create new product and variants', function(){
+
+  })
+
+  it('should exist', function(){
+    expect(Order).to.be.a('function');
+  })
+
+})
