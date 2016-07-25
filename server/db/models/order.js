@@ -43,7 +43,16 @@ var orderSchema = new Schema({
     enum: ['pending', 'paid'],
     default: 'pending'
   },
+  orderStatus: {
+    type: String,
+    required: true,
+    enum: ['processing', 'packaged', 'dispatched', 'delivered', 'ready', 'collected'],
+    default: 'processing'
+  }
   trackingData: {
+    type: String
+  },
+  pickUpDetails: {
     type: String
   },
   address: {
