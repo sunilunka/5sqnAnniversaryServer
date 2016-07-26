@@ -52,4 +52,17 @@ firebaseRefs.getEmailAssociatedUser = function(emailAddress){
   });
 }
 
+firebaseRefs.generateOrderRefNumber = function(){
+  return firebaseRefs.dbConnect('/orderRef').transaction(function(currentData){
+    if(currentData === null){
+      return 5000;
+    } else {
+      return currentData + 1;
+    }
+  })
+  .then(function(committed, snapshot){
+    return snapshot.val()
+  })
+}
+
 module.exports = firebaseRefs;

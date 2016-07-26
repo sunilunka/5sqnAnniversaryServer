@@ -53,4 +53,28 @@ describe('Firebase dependent methods', function(){
     })
   })
 
+  describe('#generateOrderRefNumber()', function(){
+
+    var originalValue;
+
+    beforeEach('Get current order number', function(done){
+      Firebase.dbConnect('/orderRef')
+      .once('value')
+      .then(function(snapshot){
+        var snap = snapshot.val();
+        if(!snap){
+          originalValue = 4999;
+        } else {
+          originalValue = snap;
+        }
+        done();
+      })
+      .catch(done);
+    })
+
+    it('should generate a new order number incremented by one', function(){
+      expect(Firebase.generateOrderRefNumber()).to.eventually.equal(originalValue + 1);
+    })
+  })
+
 })
