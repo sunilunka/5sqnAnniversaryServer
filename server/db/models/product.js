@@ -50,8 +50,8 @@ productSchema.set('toObject', {
   getters: true
 });
 
-productSchema.methods.updateStock = function(operation, amount, cb){
-  return modelHelpers.updateStock.call(this, operation, amount, cb);
+productSchema.methods.updateStock = function(operation, amount){
+  return modelHelpers.updateStock.call(this, operation, amount);
 }
 
 mongoose.model('Product', productSchema);

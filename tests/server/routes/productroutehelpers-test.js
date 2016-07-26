@@ -72,7 +72,6 @@ describe('Product route helper methods', function(){
       var processVariantsOutput;
 
       it('should be a function', function(){
-        console.log("ROUTE HELPERS: ", productRouteHelpers);
         expect(productRouteHelpers.processVariants).to.be.a('function');
       })
 

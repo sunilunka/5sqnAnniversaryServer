@@ -1,0 +1,125 @@
+{
+  "test_order": {
+    "products":[
+    {
+      "_id":"5794f3431b2706f9058f1553",
+      "options":
+      {
+        "size":"L",
+        "colour":"BLACK"
+      },
+      "imageURL":"https://firebasestorage.googleapis.com/v0/b/sqnrnzaf.appspot.com/o/anniversary%2Fshop%2Fimages%2F841201_P3KTacrail.jpg?alt=media&token=4a26783b-7e57-4579-8de1-99bac8efa8c5",
+      "product_id":"5794f3431b2706f9058f1552",
+      "price":"25.00",
+      "__v":0,
+      "title":"5 Squadron T-Shirt",
+      "display_options":"Size: L / Colour: BLACK",
+      "variant_id":"5794f3431b2706f9058f1553",
+      "quantity":2,
+      "subtotal":"50.00"
+    },
+    {
+      "_id":"5794f3431b2706f9058f1554",
+      "options":
+      {
+        "size":"S",
+        "colour":"BLACK"
+      },
+      "product_id":"5794f3431b2706f9058f1552",
+      "price":"25.00",
+      "__v":0,
+      "title":"5 Squadron T-Shirt",
+      "display_options":"Size: S / Colour: BLACK",
+      "variant_id":"5794f3431b2706f9058f1554",
+      "quantity":1,
+      "subtotal":"25.00"
+    },
+    {
+      "_id":"579002485f6e7e385a1440ef",
+      "title":"Orion Port",
+      "price":"35.00",
+      "imageURL":"https://firebasestorage.googleapis.com/v0/b/sqnrnzaf.appspot.com/o/anniversary%2Fshop%2Fimages%2Fori_port_002.jpg?alt=media&token=6edc4227-017c-4cdf-8f2d-a0e986088b10",
+      "__v":0,
+      "deliverable":false,
+      "product_id":"579002485f6e7e385a1440ef",
+      "quantity":2,
+      "subtotal":"70.00"
+      }
+    ],
+    "lineItemCount":5,
+    "totalPrice":"145.00"
+  },
+  "seedProducts": [
+    {
+      "__v": 0,
+      "_id": "579002485f6e7e385a1440ef",
+      "product_id": "579002485f6e7e385a1440ef",
+      "deliverable" : false,
+      "description": "This Orion Port will be just the lubricant to get your stories flowing!↵Aged for up to 10 years, this Soljans Founders Tawny Port has a rich nose, sweet, creamy and soft with a long lingering finish.↵Alcohol: 18%↵Your orders will be available for collection at the anniversary event on the 23rd and 24th of September 2016.",
+      "id":"579002485f6e7e385a1440ef",
+      "imageName": "ori_port_002.jpg",
+      "imageURL": "https://firebasestorage.googleapis.com/v0/b/sqnrnzaf.appspot.com/o/anniversary%2Fshop%2Fimages%2Fori_port_002.jpg?alt=media&token=6edc4227-017c-4cdf-8f2d-a0e986088b10",
+      "price": "35.00",
+      "stock": 240,
+      "title": "Orion Port"
+    },
+    {
+      "__v": 3,
+      "_id": "5794f3431b2706f9058f1552",
+      "deliverable": false,
+      "description": "Sweet as 5 Sqn T-shirt",
+      "product_id": "5794f3431b2706f9058f1552",
+      "imageName": "841201_P3KTacrail.jpg",
+      "imageURL": "https://firebasestorage.googleapis.com/v0/b/sqnrnzaf.appspot.com/o/anniversary%2Fshop%2Fimages%2F841201_P3KTacrail.jpg?alt=media&token=4a26783b-7e57-4579-8de1-99bac8efa8c5",
+      "options": {
+        "colour" : ["BLACK", "GREY", "BLUE"],
+        "size": ["XS", "S", "M", "L", "XL", "XXL"]
+      },
+      "price": "25.00",
+      "stock": 0,
+      "title": "5 Squadron T-Shirt",
+      "variants": [ "5794f3431b2706f9058f1553", "5794f3431b2706f9058f1554", "5794f3431b2706f9058f1555"]
+    }
+  ],
+
+  "seedVariants": [
+    {
+      "__v": 0,
+      "_id": "5794f3431b2706f9058f1553",
+      "variant_id": "5794f3431b2706f9058f1553",
+      "imageName": "841201_P3KTacrail.jpg",
+      "imageURL":"https://firebasestorage.googleapis.com/v0/b/sqnrnzaf.appspot.com/o/anniversary%2Fshop%2Fimages%2F841201_P3KTacrail.jpg?alt=media&token=4a26783b-7e57-4579-8de1-99bac8efa8c5",
+      "options": {
+        "colour": "BLACK",
+        "size": "L"
+      },
+      "price": "25.00",
+      "product_id": "5794f3431b2706f9058f1552",
+      "stock": 20
+    },
+    {
+      "__v": 0,
+      "_id": "5794f3431b2706f9058f1554",
+      "variant_id": "5794f3431b2706f9058f1554",
+      "options": {
+        "colour": "BLACK",
+        "size": "S"
+      },
+      "price": "25.00",
+      "product_id": "5794f3431b2706f9058f1552",
+      "stock": 20
+    },
+    {
+      "__v": 0,
+      "_id": "5794f3431b2706f9058f1555",
+      "variant_id": "5794f3431b2706f9058f1555",
+      "options": {
+        "colour":"BLACK",
+        "size": "M"
+      },
+      "price": "25.00",
+      "product_id": "5794f3431b2706f9058f1552",
+      "stock": 20
+    }
+  ]
+}

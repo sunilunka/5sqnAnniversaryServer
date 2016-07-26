@@ -81,7 +81,6 @@ describe('Variant model', function () {
 
       it('should return a promise', function(){
         return expect(testVariant.updateStock('subtract', 5)).to.eventually.be.fulfilled;
-
       })
 
       it('should increase stock when "add" is the first argument', function(){
@@ -95,14 +94,18 @@ describe('Variant model', function () {
         return expect(testVariant.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
       })
 
-      it('should return object with unmodified product, and prop nostock if subtract is more than available', function(){
-        return expect(testVariant.updateStock('subtract', 69)).to.eventually.eql({
-          nostock: true,
-          product: testVariant
+      it('should return reject, with product and prop nostock if subtract is more than available', function(done){
+        // return expect(testVariant.updateStock('subtract', 69)).to.eventually.be.rejected;
+        testVariant.updateStock('subtract', 69)
+        .then(function(product){
+          return product;
+          done();
+        })
+        .catch(function(rejection){
+          console.log("REJECTION: ", rejection);
+          done();
         })
       })
-
     })
   })
-
 });

@@ -53,7 +53,9 @@ describe('Firebase dependent methods', function(){
     })
   })
 
-  describe('#generateOrderRefNumber()', function(){
+
+  /* Only run these tests when not live, or else, allocate another field to the REAL numbers (good idea!) */
+  describe('#generateOrderRefNumber() TEST SHOULD ONLY BE RUN WHEN STORE NOT LIVE', function(){
 
     var originalValue;
 
@@ -71,6 +73,8 @@ describe('Firebase dependent methods', function(){
       })
       .catch(done);
     })
+
+    /* Do not reset the number after each, as this is running on the live database (not ideal I know...) and will increment the real number. */
 
     it('should generate a new order number incremented by one', function(){
       expect(Firebase.generateOrderRefNumber()).to.eventually.equal(originalValue + 1);

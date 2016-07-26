@@ -42,8 +42,8 @@ variantSchema.set('toObject', {
   getters: true
 });
 
-variantSchema.methods.updateStock = function(operation, amount, cb){
-  return modelHelpers.updateStock.call(this, operation, amount, cb)
+variantSchema.methods.updateStock = function(operation, amount){
+  return modelHelpers.updateStock.call(this, operation, amount)
 }
 
 mongoose.model('Variant', variantSchema);
