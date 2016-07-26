@@ -1,4 +1,6 @@
-require('./app-test.js');
-require('./routehelpers-test.js');
-require('./productroutes-test.js');
-require('./product_variant_routes-test.js');
+require('./app-test');
+require('./productroutehelpers-test');
+require('./productroutes-test');
+require('./orderroutehelpers-test');
+require('./orderroutes-test');
+require('./product_variant_routes-test');

@@ -40,7 +40,7 @@ var lineItemSchema = new Schema({
 
 var orderSchema = new Schema({
   order_ref: {
-    type: Number,
+    type: String,
     required: true,
     unique: true
   },
@@ -104,11 +104,5 @@ var orderSchema = new Schema({
   }
 })
 
-// orderSchema.plugin(autoIncrement.plugin, {
-//   model: 'Order',
-//   field: 'order_ref',
-//   startAt: 5000,
-//   incrementBy: 1
-// })
 
 mongoose.model('Order', orderSchema);

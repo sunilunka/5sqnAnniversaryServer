@@ -6,7 +6,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
-var routeHelpers = require('./route-helpers');
 var _ = require('lodash');
 
 router.get('/', function(req, res, next){

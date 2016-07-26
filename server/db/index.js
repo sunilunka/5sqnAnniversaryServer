@@ -6,7 +6,6 @@ var firebaseInit = require(path.join(__dirname, '../app/configure/authentication
 var DATABASE_URI = require(path.join(__dirname, '../env')).DATABASE_URI;
 
 var mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
 mongoose.Promise = require('bluebird');
 
 

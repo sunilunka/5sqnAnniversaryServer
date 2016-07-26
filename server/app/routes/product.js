@@ -6,7 +6,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
-var routeHelpers = require('./route-helpers');
+var routeHelpers = require('./product-route-helpers');
 var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var _ = require('lodash');
 
