@@ -9,7 +9,7 @@ mongoose.Promise = require('bluebird');
 require('../../../server/db/models');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
-
+var Firebase = require(path.join(__dirname, '../../../server/db/fire-db'));
 var testProducts = testOrderData.seedProducts;
 var testVariants = testOrderData.seedVariants;
 
@@ -55,6 +55,30 @@ describe('Order route helper methods', function(){
         expect(item).to.not.have.ownProperty('_id');
         expect(item).to.not.have.ownProperty('__v');
       })
+    })
+  })
+
+  describe('#generateOrderRef()', function(){
+
+    var originalValue;
+
+    beforeEach('Get current order number', function(done){
+      Firebase.dbConnect('/orderRef')
+      .once('value')
+      .then(function(snapshot){
+        var snap = snapshot.val();
+        if(!snap){
+          originalValue = 4999;
+        } else {
+          originalValue = snap;
+        }
+        done();
+      })
+      .catch(done);
+    })
+
+    it('should return a formatted string with unique ref number', function(){
+      return expect(orderRouteHelpers.generateOrderRef()).to.eventually.equal('5SQN-' + (originalValue + 1) + '-75');
     })
   })
 

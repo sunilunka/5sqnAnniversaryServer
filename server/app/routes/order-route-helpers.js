@@ -22,6 +22,13 @@ module.exports = {
     })
   },
 
+  generateOrderRef: function(){
+    return fireMethods.generateOrderRefNumber()
+    .then(function(number){
+      return '5SQN-' + number + '-75';
+    })
+  },
+
   modifyProductStock: function(productArray){
     var itemsToUpdate = productArray.map(function(product){
       var requestedAmount = product.quantity;
