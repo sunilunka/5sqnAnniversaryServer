@@ -60,9 +60,8 @@ firebaseRefs.generateOrderRefNumber = function(){
       return currentData + 1;
     }
   })
-  .then(function(committed, snapshot){
-    console.log("SNAPSHOT: ", snapshot)
-    return snapshot.val()
+  .then(function(transactionObj){
+    return transactionObj.snapshot.val();
   })
 }
 
