@@ -95,13 +95,12 @@ describe('Order routes', function(){
       })
 
       it('should append a unique order_ref string', function(done){
-
         guestAgent.post('/api/orders/new')
         .send(testOrder)
         .expect(201)
         .end(function(err, res){
           if(err) done(err);
-          expect(res.order_ref).to.equal('5SQN-75-' + (originalValue + 1))
+          expect(res.body.order_ref).to.equal('5SQN-75-' + (originalValue + 1));
           done();
         })
       })
