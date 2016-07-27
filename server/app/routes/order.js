@@ -3,13 +3,27 @@ var path = require('path');
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var Firebase = require(path.join(__dirname, '../../db/fire-db'));
+var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var Order = mongoose.model('Order');
 var orderHelpers = require('./order-route-helpers');
 
+router.get('/', function(req, res, next){
+  fireMethods.checkAuthorisedManager(req.body['user_id'])
+  .then(function(authorised){
+    if(authorised){
+      Order.find({}).exec()
+      .then(function(orders){
+        res.status(200).json(orders);
+      })
+    } else {
+      res.sendStatus(401);
+    }
+  })
+})
+
 router.post('/new', function(req, res, next){
   req.body.products = orderHelpers.removeConflictingKeys(req.body.products);
-  Firebase.getEmailAssociatedUser(req.body.email)
+  fireMethods.getEmailAssociatedUser(req.body.email)
   .then(function(user){
     if(!user) return req.body;
     var userName = user.firstName + " " + user.lastName;
