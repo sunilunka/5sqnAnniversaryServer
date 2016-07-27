@@ -94,7 +94,9 @@ var orderSchema = new Schema({
   },
   user_id: {
     type: String
-  },
+  }
+},
+{
   timestamps: true
 })
 

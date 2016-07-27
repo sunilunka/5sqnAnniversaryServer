@@ -12,7 +12,7 @@ var Variant = mongoose.model('Variant');
 var Firebase = require(path.join(__dirname, '../../../server/db/fire-db'));
 var testProducts = testOrderData.seedProducts;
 var testVariants = testOrderData.seedVariants;
-
+var _ = require('lodash');
 var expect = require('chai').expect;
 
 var dbURI = 'mongodb://localhost:27017/testingDB';
@@ -103,7 +103,23 @@ describe('Order route helper methods', function(){
     })
 
     it('should return an array of items', function(){
-      expect(orderRouteHelpers.amendOrderQuantities(testOrder.products)).to.eventually.be.a('array');
+      return expect(orderRouteHelpers.amendOrderQuantities(testOrder.products)).to.eventually.be.a('array');
+    })
+
+    it('should return append the key "amendedQuantity" to an item that requests a quantity in excess of current stock', function(done){
+      testOrder.products[0].quantity = 50;
+
+      var targetProduct = testOrder.products[0];
+
+      orderRouteHelpers.amendOrderQuantities(testOrder.products)
+      .then(function(amendedProducts){
+        var targetProductIdx = _.findIndex(amendedProducts, function(product){
+          return product.display_options === targetProduct.display_options;
+        });
+        expect(amendedProducts[targetProductIdx]).to.have.property('amendedQuantity', 20);
+        done();
+      })
+      .catch(done)
     })
 
   })
