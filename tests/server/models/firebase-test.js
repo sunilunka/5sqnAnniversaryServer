@@ -45,7 +45,7 @@ describe('Firebase dependent methods', function(){
 
   describe('#getEmailAssociatedUser()', function(){
     it('should return the associated user when a valid email address is supplied', function(done){
-      expect(Firebase.getEmailAssociatedUser('sunil.unka@gmail.com')).to.eventually.equal(testId).notify(done);
+      expect(Firebase.getEmailAssociatedUser('sunil.unka@gmail.com')).to.eventually.have.property('user_id', testId).notify(done);
     })
 
     it('should return null when no user is associated with the address', function(done){
@@ -74,7 +74,7 @@ describe('Firebase dependent methods', function(){
       .catch(done);
     })
 
-    /* Do not reset the number after each, as this is running on the live database (not ideal I know...) and will increment the real number. */
+    /* Do not reset the number after each, as this is running on the live database (not ideal I know...intent is to fix this later, using ENV dependent settings.) and will increment the real number. */
 
     it('should generate a new order number incremented by one', function(){
       expect(Firebase.generateOrderRefNumber()).to.eventually.equal(originalValue + 1);

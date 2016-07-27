@@ -117,6 +117,8 @@ describe('Order route helper methods', function(){
           return product.display_options === targetProduct.display_options;
         });
         expect(amendedProducts[targetProductIdx]).to.have.property('amendedQuantity', 20);
+        /* Reset test order products back to 2 to ensure no further tests are affected. */
+        testOrder.products[0].quantity = 2;
         done();
       })
       .catch(done)

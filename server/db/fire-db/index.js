@@ -41,11 +41,12 @@ firebaseRefs.getEmailAssociatedUser = function(emailAddress){
   return firebaseRefs.dbConnect('attendees').orderByChild('email').equalTo(emailAddress).once('value')
   .then(function(childSnap){
     var result = childSnap.val();
-    var userId;
+    var userObj;
     if(result){
-      console.log("RESULT: ", result);
-      userId = Object.keys(result)[0];
-      return userId;
+      var user_id = Object.keys(result)[0];
+      userObj = result[user_id];
+      userObj['user_id'] = user_id;
+      return userObj;
     } else {
       return null;
     }

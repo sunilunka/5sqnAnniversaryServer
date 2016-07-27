@@ -8,6 +8,7 @@ require('../../../server/db/models');
 var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var Order = mongoose.model('Order');
+var Firebase = require(path.join(__dirname, '../../../server/db/fire-db'));
 
 var seedData = require(path.join(__dirname, '../seed-data/order-data.json'));
 var testOrder = seedData.test_order;
@@ -62,11 +63,49 @@ describe('Order routes', function(){
   })
 
 
-  describe('POST "/"', function(){
+  describe('POST "/new"', function(){
 
-    it('should append a unique order_ref string')
+    describe('valid order', function(){
 
-    it('should create a new order')
+      var originalValue;
+
+      beforeEach('Get current order number', function(done){
+        Firebase.dbConnect('/orderRef')
+        .once('value')
+        .then(function(snapshot){
+          var snap = snapshot.val();
+          if(!snap){
+            originalValue = 4999;
+          } else {
+            originalValue = snap;
+          }
+          done();
+        })
+        .catch(done);
+      })
+
+      it('should create a new order', function(done){
+        guestAgent.post('/api/orders/new')
+        .send(testOrder)
+        .expect(201)
+        .end(function(err, res){
+          if(err) done(err);
+          expect(Order.find({}).exec()).to.eventually.have.length(1).notify(done);
+        })
+      })
+
+      it('should append a unique order_ref string', function(done){
+
+        guestAgent.post('/api/orders/new')
+        .send(testOrder)
+        .expect(201)
+        .end(function(err, res){
+          if(err) done(err);
+          expect(res.order_ref).to.equal('5SQN-75-' + (originalValue + 1))
+          done();
+        })
+      })
+    })
 
     describe('order product(s) have insufficient stock', function(){
 
@@ -80,7 +119,7 @@ describe('Order routes', function(){
       })
 
       it('should not create a new order if one or more saves rejects', function(done){
-        guestAgent.post('/api/orders')
+        guestAgent.post('/api/orders/new')
         .send(testOrder)
         .expect(200)
         .end(function(err, res){
@@ -90,12 +129,11 @@ describe('Order routes', function(){
       })
 
       it('should not modify product stock if one or more saves rejects', function(done){
-        guestAgent.post('/api/orders')
+        guestAgent.post('/api/orders/new')
         .send(testOrder)
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
-          console.log("RESPONSE: ", res.body);
           Variant.find({}).exec()
           .then(function(variants){
             variants.forEach(function(v){
@@ -107,21 +145,18 @@ describe('Order routes', function(){
         })
       })
 
-      xit('should annotate insufficient stock orders with available stock', function(done){
-        guestAgent.post('/api/orders')
+      it('should annotate insufficient stock orders with available stock', function(done){
+        guestAgent.post('/api/orders/new')
         .send(testOrder)
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
-          console.log("RES PRODUCTS: ", res.body);
-          res.body.products.some(function(item){
-            return item['nostock'] === true;
-          })
+          expect(res.body.products.some(function(item){
+            return item.hasOwnProperty('amendedQuantity');
+          })).to.be.ok;
           done();
         })
       })
-
-      it('should annotate 0 to orders with no stock')
     })
 
   })
