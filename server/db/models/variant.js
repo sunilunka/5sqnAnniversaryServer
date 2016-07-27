@@ -43,6 +43,10 @@ variantSchema.set('toObject', {
   getters: true
 });
 
+variantSchema.statics.checkStockAvailable = function(item_id, requestedStock){
+  return modelHelpers.getAvailableStock.call(this, item_id, requestedStock);
+}
+
 variantSchema.methods.updateStock = function(operation, amount){
   return modelHelpers.updateStock.call(this, operation, amount)
 }

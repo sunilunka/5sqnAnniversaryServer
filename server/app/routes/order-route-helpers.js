@@ -45,6 +45,16 @@ module.exports = {
       }
     })
     return Promise.all(itemsToUpdate);
+  },
+
+  amendOrderQuantities: function(itemsArray){
+    var amendedOrder = productsArray.map(function(item){
+      if(item.hasOwnProperty('variant_id')){
+
+      } else {
+
+      }
+    })
   }
 
 

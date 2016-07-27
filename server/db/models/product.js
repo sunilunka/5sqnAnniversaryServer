@@ -50,6 +50,10 @@ productSchema.set('toObject', {
   getters: true
 });
 
+productSchema.statics.checkStockAvailable = function(item_id, requestedStock){
+  return modelHelpers.getAvailableStock.call(this, item_id, requestedStock);
+}
+
 productSchema.methods.updateStock = function(operation, amount){
   return modelHelpers.updateStock.call(this, operation, amount);
 }

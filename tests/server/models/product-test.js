@@ -86,5 +86,20 @@ describe('Product model', function () {
         return expect(testProduct.updateStock('subtract', 69)).to.eventually.be.rejected;
       })
     })
+
+    describe('Product#checkStockAvailable', function(){
+
+      it('should return the requested stock if less than current stock', function(){
+        return expect(Product.checkStockAvailable(testProduct._id, 9)).to.eventually.equal(9);
+      })
+
+      it('should return the current stock if the requested quantity greater', function(){
+        return expect(Product.checkStockAvailable(testProduct._id, 11)).to.eventually.equal(10);
+      })
+
+      it('should return requested stock if the quantity is the same amount', function(){
+        return expect(Product.checkStockAvailable(testProduct._id, 10)).to.eventually.equal(10);
+      })
+    })
   })
 });

@@ -77,6 +77,10 @@ describe('Order route helper methods', function(){
       .catch(done);
     })
 
+    it('should be a function', function(){
+      expect(orderRouteHelpers.generateOrderRef).to.be.a('function');
+    })
+
     it('should return a formatted string with unique ref number', function(){
       return expect(orderRouteHelpers.generateOrderRef()).to.eventually.equal('5SQN-75-' + (originalValue + 1));
     })
@@ -84,8 +88,18 @@ describe('Order route helper methods', function(){
 
   describe('#modifyProductStock()', function(){
 
+    it('should be a function', function(){
+      expect(orderRouteHelpers.modifyProductStock).to.be.a('function');
+    })
+
     it('should return an array', function(){
       return expect(orderRouteHelpers.modifyProductStock(testOrder.products)).to.eventually.be.an('array');
+    })
+  })
+
+  describe('#amendOrderQuantities', function(){
+    it('should be a function', function(){
+      expect(orderRouteHelpers.amendOrderQuantities).to.be.a('function');
     })
   })
 

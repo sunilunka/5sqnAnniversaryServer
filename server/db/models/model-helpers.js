@@ -24,5 +24,18 @@ module.exports = {
   transformToString: function(num){
     if(!num) return '00.00';
     return (num / 100).toFixed(2);
+  },
+
+  getAvailableStock: function(item_id, requestedStock){
+    return this.findById(item_id)
+    .select('stock')
+    .exec()
+    .then(function(item){
+      if(requestedStock < item.stock){
+        return requestedStock;
+      } else {
+        return item.stock;
+      }
+    })
   }
 }
