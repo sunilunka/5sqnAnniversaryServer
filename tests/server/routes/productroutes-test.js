@@ -420,7 +420,7 @@ describe('Products Route', function () {
 
 		describe('DELETE /:product_id', function(){
 
-			it('should return 403 status when user is not a manager', function(done){
+			it('should return 401 status when user is not a manager', function(done){
 				guestAgent.delete('/api/products/' + testProduct._id)
 				.expect(401)
 				.end(function(err, res){

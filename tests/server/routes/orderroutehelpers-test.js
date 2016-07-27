@@ -78,7 +78,7 @@ describe('Order route helper methods', function(){
     })
 
     it('should return a formatted string with unique ref number', function(){
-      return expect(orderRouteHelpers.generateOrderRef()).to.eventually.equal('5SQN-' + (originalValue + 1) + '-75');
+      return expect(orderRouteHelpers.generateOrderRef()).to.eventually.equal('5SQN-75-' + (originalValue + 1));
     })
   })
 

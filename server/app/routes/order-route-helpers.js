@@ -25,7 +25,7 @@ module.exports = {
   generateOrderRef: function(){
     return fireMethods.generateOrderRefNumber()
     .then(function(number){
-      return '5SQN-' + number + '-75';
+      return '5SQN-75-' + number;
     })
   },
 

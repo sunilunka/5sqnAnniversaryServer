@@ -6,11 +6,13 @@ const Schema = mongoose.Schema;
 
 var lineItemSchema = new Schema({
   product_id: {
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Product'
   },
   variant_id: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'Variant'
   },
   title: {
     type: String,

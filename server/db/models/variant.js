@@ -6,7 +6,8 @@ var modelHelpers = require('./model-helpers')
 
 var variantSchema = new Schema({
   product_id: {
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    ref: 'Product'
   },
   options: {
     type: {},

@@ -58,4 +58,33 @@ describe('Product model', function () {
       });
     })
   })
+
+  describe('instance and virtual methods', function(){
+
+    describe('Product#updateStock', function(){
+
+      it('should have a method .updateStock()', function(){
+        expect(testProduct.updateStock).to.be.a('function');
+      })
+
+      it('should return a promise', function(){
+        return expect(testProduct.updateStock('subtract', 5)).to.eventually.be.fulfilled;
+      })
+
+      it('should increase stock when "add" is the first argument', function(){
+        var originalStock = testProduct.stock;
+        return expect(testProduct.updateStock('add', 5)).to.eventually.have.property('stock', originalStock + 5);
+      })
+
+      it('should decrease stock when "subtract" is the first argument', function(){
+        var originalStock = testProduct.stock;
+
+        return expect(testProduct.updateStock('subtract', 5)).to.eventually.have.property('stock', originalStock - 5);
+      })
+
+      it('should reject if subtract is more than available', function(){
+        return expect(testProduct.updateStock('subtract', 69)).to.eventually.be.rejected;
+      })
+    })
+  })
 });
