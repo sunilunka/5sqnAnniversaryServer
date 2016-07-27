@@ -101,6 +101,11 @@ describe('Order route helper methods', function(){
     it('should be a function', function(){
       expect(orderRouteHelpers.amendOrderQuantities).to.be.a('function');
     })
+
+    it('should return an array of items', function(){
+      expect(orderRouteHelpers.amendOrderQuantities(testOrder.products)).to.eventually.be.a('array');
+    })
+
   })
 
 })

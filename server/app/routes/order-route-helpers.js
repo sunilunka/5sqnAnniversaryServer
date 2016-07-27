@@ -48,13 +48,27 @@ module.exports = {
   },
 
   amendOrderQuantities: function(itemsArray){
+
+    var amendItemQuantity = function(availableQuantity){
+      if(availableQuantity === item.quantity){
+        return item;
+      } else {
+        item.amendedQuantity = availableQuantity;
+        return item;
+      }
+    }
+
     var amendedOrder = productsArray.map(function(item){
       if(item.hasOwnProperty('variant_id')){
-
+        Variant.checkStockAvailable(item.variant_id, item.quantity)
+        .then(amendItemQuantity)
       } else {
-
+        Product.checkStockAvailable(item.product_id, item.quantity)
+        .then(amendItemQuantity)
       }
     })
+
+    return Promise.all(amendedOrder);
   }
 
 
