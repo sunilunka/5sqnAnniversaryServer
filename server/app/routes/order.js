@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var Order = mongoose.model('Order');
 var orderHelpers = require('./order-route-helpers');
+var _ = require('lodash');
 
 router.get('/', function(req, res, next){
   fireMethods.checkAuthorisedManager(req.body['user_id'])
@@ -71,7 +72,11 @@ router.get('/:orderId', function(req, res, next){
 })
 
 router.put('/:orderId', function(req, res, next){
-
+  _.assign(req.order, req.body)
+  req.order.save()
+  .then(function(updatedOrder){
+    res.status(200).json(updatedOrder);
+  })
 })
 
 

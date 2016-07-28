@@ -220,7 +220,23 @@ describe('Order routes', function(){
           done();
         })
       })
+    })
 
+    describe('PUT "/:orderId"', function(){
+      it('should apply changes and return updated order', function(done){
+        guestAgent.put('/api/orders/' + savedOrder._id)
+        .send({
+          orderStatus: 'ready',
+          paymentState: 'paid'
+        })
+        .expect(200)
+        .end(function(err, res){
+          if(err) return done(err);
+          expect(res.body).to.have.property('orderStatus', 'ready');
+          expect(res.body).to.have.property('paymentState', 'paid');
+          done();
+        })
+      })
     })
 
   })
