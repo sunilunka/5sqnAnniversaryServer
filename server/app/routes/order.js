@@ -72,7 +72,7 @@ router.get('/:orderId', function(req, res, next){
 
 router.put('/:orderId', function(req, res, next){
   if(req.body.hasOwnProperty('orderStatus') && req.body.orderStatus === 'cancelled'){
-    /* Arrays in MongoDB are initially objects, and need to be converted to native JS array objects using .toObject() */
+    /* Arrays and DocumentArrays in MongoDB are not native JS arrays (which are objects) and their documents are not either, and need to be converted using #toObject() */
     orderHelpers.restockProducts(req.order.products.toObject())
     .then(function(modifiedProducts){
       return req.order;

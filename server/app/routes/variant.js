@@ -8,24 +8,8 @@ var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var _ = require('lodash');
 
-router.get('/', function(req, res, next){
+router.put('/:variantId/stock', function(req, res, next){
 
-})
-
-router.post('/', function(req, res, next){
-  var savedVariant;
-  Variant.create(req.body)
-  .then(function(variant){
-    savedVariant = variant;
-    return Product.findById(variant.product_id)
-    .then(function(product){
-      product.variants.addToSet(variant._id);
-      return product.save();
-    })
-  })
-  .then(function(product){
-    res.status(201).json(savedVariant);
-  })
 })
 
 module.exports = router;
