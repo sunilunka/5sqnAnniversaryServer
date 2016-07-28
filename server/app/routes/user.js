@@ -9,6 +9,17 @@ var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 
 var Order = mongoose.model('Order');
 
+router.get('/verifyemail', function(req, res, next){
+  fireMethods.getEmailAssociatedUser(req.body.email)
+  .then(function(userDetails){
+    if(!userDetails){
+      res.sendStatus(204)
+    } else {
+      res.status(200).json(userDetails);
+    }
+  })
+})
+
 router.param('userId', function(req, res, next, id){
   fireMethods.getOneAttendeeRef(id)
   .then(function(userDetails){
@@ -29,7 +40,7 @@ router.get('/:userId/orders', function(req, res, next){
   })
   .exec()
   .then(function(orders){
-    res.status(200).json(orders);    
+    res.status(200).json(orders);
   })
 })
 
