@@ -63,6 +63,35 @@ describe('Order routes', function(){
   })
 
 
+  describe('GET "/""', function(){
+
+    it('sends a 401 response if the user is not a manager', function(done){
+      guestAgent.get('/api/orders')
+      .send({
+        user_id: testIdNonManager
+      })
+      .expect(401)
+      .end(function(err, res){
+        if(err) return done(err);
+        done();
+      })
+    })
+
+    it('sends a 200 response with an array of results if user is a manager', function(done){
+      guestAgent.get('/api/orders')
+      .send({
+        user_id: testId
+      })
+      .expect(200)
+      .end(function(err, res){
+        if(err) return done(err);
+        expect(res.body).to.be.a('array');
+        done();
+      })
+    })
+
+  })
+
   describe('POST "/new"', function(){
 
     describe('valid order', function(){
@@ -89,7 +118,7 @@ describe('Order routes', function(){
         .send(testOrder)
         .expect(201)
         .end(function(err, res){
-          if(err) done(err);
+          if(err) return done(err);
           expect(Order.find({}).exec()).to.eventually.have.length(1).notify(done);
         })
       })
@@ -99,7 +128,7 @@ describe('Order routes', function(){
         .send(testOrder)
         .expect(201)
         .end(function(err, res){
-          if(err) done(err);
+          if(err) return done(err);
           expect(res.body.order_ref).to.equal('5SQN-75-' + (originalValue + 1));
           done();
         })
@@ -115,6 +144,11 @@ describe('Order routes', function(){
           }
           return product;
         })
+      })
+
+      afterEach('reset quantities', function(){
+        testOrder.products[0].quantity = 2;
+        testOrder.products[1].quantity = 1;
       })
 
       it('should not create a new order if one or more saves rejects', function(done){
@@ -156,6 +190,37 @@ describe('Order routes', function(){
           done();
         })
       })
+    })
+  })
+
+  describe('"/:orderId" route', function(){
+
+    var savedOrder;
+
+    beforeEach('create new order', function(done){
+
+      guestAgent.post('/api/orders/new')
+      .send(testOrder)
+      .expect(201)
+      .end(function(err, res){
+        if(err) return done(err);
+        savedOrder = res.body;
+        done();
+      })
+    })
+
+    describe('GET "/:orderId"', function(){
+
+      it('should return the selected order', function(done){
+        guestAgent.get('/api/orders/' + savedOrder._id)
+        .expect(200)
+        .end(function(err, res){
+          if(err) return done(err);
+          expect(res.body.user_id).to.equal(testId);
+          done();
+        })
+      })
+
     })
 
   })

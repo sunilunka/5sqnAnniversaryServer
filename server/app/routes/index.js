@@ -10,6 +10,7 @@ var cors = require(path.join(__dirname, '../configure/cors-middleware'))
 router.use('/', cors);
 router.use('/products', require('./product'));
 router.use('/orders', require('./order'));
+router.use('/users', require('./user'));
 
 
 module.exports = router;

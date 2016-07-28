@@ -58,6 +58,22 @@ router.post('/new', function(req, res, next){
   })
 })
 
+router.param('orderId', function(req, res, next, id){
+  Order.findById(id)
+  .then(function(order){
+    req.order = order;
+    next();
+  })
+})
+
+router.get('/:orderId', function(req, res, next){
+  res.status(200).json(req.order);
+})
+
+router.put('/:orderId', function(req, res, next){
+
+})
+
 
 
 
