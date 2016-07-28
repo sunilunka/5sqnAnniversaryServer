@@ -45,7 +45,6 @@ router.post('/new', function(req, res, next){
       })
     })
     .catch(function(err){
-      // console.log("ERROR: ", err);
       if(err.errors['stock']){
         orderHelpers.amendOrderQuantities(req.body.products)
         .then(function(amendedOrderItems){
@@ -72,11 +71,26 @@ router.get('/:orderId', function(req, res, next){
 })
 
 router.put('/:orderId', function(req, res, next){
-  _.assign(req.order, req.body)
-  req.order.save()
-  .then(function(updatedOrder){
-    res.status(200).json(updatedOrder);
-  })
+  if(req.body.hasOwnProperty('orderStatus') && req.body.orderStatus === 'cancelled'){
+    /* Arrays in MongoDB are initially objects, and need to be converted to native JS array objects using .toObject() */
+    orderHelpers.restockProducts(req.order.products.toObject())
+    .then(function(modifiedProducts){
+      return req.order;
+    })
+    .then(function(orderToCancel){
+      _.assign(orderToCancel, req.body)
+      return orderToCancel.save()
+    })
+    .then(function(cancelledOrder){
+      res.status(200).json(cancelledOrder);
+    })
+  } else {
+    _.assign(req.order, req.body);
+    req.order.save()
+    .then(function(updatedOrder){
+      res.status(200).json(updatedOrder);
+    })
+  }
 })
 
 

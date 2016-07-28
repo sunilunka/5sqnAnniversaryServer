@@ -148,11 +148,11 @@ describe('Order route helper methods', function(){
     })
 
     it('should return an array', function(){
-      return expect(orderRouteHelpers.restockProducts(testOrder)).to.eventually.be.a('array');
+      return expect(orderRouteHelpers.restockProducts(testOrder.products)).to.eventually.be.a('array');
     })
 
     it('should add the requested quantity to a product or variant', function(done){
-      orderRouteHelpers.restockProducts(testOrder)
+      orderRouteHelpers.restockProducts(testOrder.products)
       .then(function(restockedProducts){
         return Variant.find({
           options: {

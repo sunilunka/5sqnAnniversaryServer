@@ -196,6 +196,7 @@ describe('Order routes', function(){
   describe('"/:orderId" route', function(){
 
     var savedOrder;
+    var originalStock;
 
     beforeEach('create new order', function(done){
 
@@ -207,6 +208,21 @@ describe('Order routes', function(){
         savedOrder = res.body;
         done();
       })
+    })
+
+    beforeEach('get variant stock', function(done){
+      Variant.find({
+        options: {
+          size: "L",
+          colour: "BLACK"
+        }
+      })
+      .exec()
+      .then(function(variants){
+        originalStock = variants[0].stock;
+        done();
+      })
+      .catch(done);
     })
 
     describe('GET "/:orderId"', function(){
@@ -223,6 +239,7 @@ describe('Order routes', function(){
     })
 
     describe('PUT "/:orderId"', function(){
+
       it('should apply changes and return updated order', function(done){
         guestAgent.put('/api/orders/' + savedOrder._id)
         .send({
@@ -237,8 +254,29 @@ describe('Order routes', function(){
           done();
         })
       })
+
+      it('should add stock to products in the order if orderStatus is "cancelled"', function(done){
+        guestAgent.put('/api/orders/' + savedOrder._id)
+        .send({
+          orderStatus: 'cancelled'
+        })
+        .expect(200)
+        .end(function(err, res){
+          if(err) return done(err);
+          expect(res.body).to.have.property('orderStatus', 'cancelled');
+          Variant.find({
+            options: {
+              size: "L",
+              colour: "BLACK"
+            }
+          }).exec()
+          .then(function(variants){
+            expect(variants[0].stock).to.equal(20);
+            done();
+          })
+          .catch(done);
+        })
+      })
     })
-
   })
-
 })

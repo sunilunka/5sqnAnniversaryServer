@@ -78,8 +78,8 @@ module.exports = {
     return Promise.all(amendedOrder);
   },
 
-  restockProducts: function(order){
-    var stockToUpdate = order.products.map(function(product){
+  restockProducts: function(products){
+    var stockToUpdate = products.map(function(product){
       var amountToAdd = product.quantity;
       return modifyMultipleProducts(product, 'add', amountToAdd);
     })
