@@ -97,7 +97,7 @@ describe('Order route helper methods', function(){
     })
   })
 
-  describe('#amendOrderQuantities', function(){
+  describe('#amendOrderQuantities()', function(){
     it('should be a function', function(){
       expect(orderRouteHelpers.amendOrderQuantities).to.be.a('function');
     })
@@ -123,7 +123,50 @@ describe('Order route helper methods', function(){
       })
       .catch(done)
     })
+  })
 
+  describe('#restockProducts()', function(){
+
+    var originalStockOne;
+
+    beforeEach('Get variant stock', function(done){
+      Variant.find({
+        options: {
+          size: "L",
+          colour: "BLACK"
+        }
+      }).exec()
+      .then(function(variants){
+        originalStockOne = variants[0].stock;
+        done();
+      })
+      .catch(done);
+    })
+
+    it('should be a function', function(){
+      expect(orderRouteHelpers.restockProducts).to.be.a('function');
+    })
+
+    it('should return an array', function(){
+      return expect(orderRouteHelpers.restockProducts(testOrder)).to.eventually.be.a('array');
+    })
+
+    it('should add the requested quantity to a product or variant', function(done){
+      orderRouteHelpers.restockProducts(testOrder)
+      .then(function(restockedProducts){
+        return Variant.find({
+          options: {
+            size: "L",
+            colour: "BLACK"
+          }
+        }).exec();
+      })
+      .then(function(variants){
+        expect(variants[0].stock).to.equal(originalStockOne + 2);
+        done();
+      })
+      .catch(done);
+    })
   })
 
 })

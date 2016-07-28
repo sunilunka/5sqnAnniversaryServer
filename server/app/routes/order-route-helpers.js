@@ -9,6 +9,20 @@ var Variant = mongoose.model('Variant');
 var Order = mongoose.model('Order');
 var _ = require('lodash');
 
+var modifyMultipleProducts = function(product, operation, requestedAmount){
+  if(product.hasOwnProperty('variant_id')){
+    return Variant.findById(product.variant_id)
+    .then(function(variant){
+      return variant.updateStock(operation, requestedAmount)
+    })
+  } else {
+    return Product.findById(product.product_id)
+    .then(function(product){
+      return product.updateStock(operation, requestedAmount);
+    })
+  }
+}
+
 module.exports = {
   removeConflictingKeys: function(targetArray){
     return targetArray.map(function(item){
@@ -32,17 +46,7 @@ module.exports = {
   modifyProductStock: function(productArray){
     var itemsToUpdate = productArray.map(function(product){
       var requestedAmount = product.quantity;
-      if(product.hasOwnProperty('variant_id')){
-        return Variant.findById(product.variant_id)
-        .then(function(variant){
-          return variant.updateStock('subtract', requestedAmount)
-        })
-      } else {
-        return Product.findById(product.product_id)
-        .then(function(product){
-          return product.updateStock('subtract', requestedAmount);
-        })
-      }
+      return modifyMultipleProducts(product, 'subtract', requestedAmount);
     })
     return Promise.all(itemsToUpdate);
   },
@@ -72,6 +76,14 @@ module.exports = {
       }
     })
     return Promise.all(amendedOrder);
+  },
+
+  restockProducts: function(order){
+    var stockToUpdate = order.products.map(function(product){
+      var amountToAdd = product.quantity;
+      return modifyMultipleProducts(product, 'add', amountToAdd);
+    })
+    return Promise.all(stockToUpdate);
   }
 
 
