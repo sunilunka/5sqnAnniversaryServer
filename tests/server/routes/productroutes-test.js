@@ -453,5 +453,22 @@ describe('Products Route', function () {
 				})
 			})
 		})
+
+		describe('/:productId/stock', function(){
+
+			it('should add the key "nostock" to the returned product if attempt to remove more items than numberin stock', function(done){
+				guestAgent.put('/api/products/' + testProduct._id + '/stock')
+				.send({
+					operation: 'subtract',
+					amount: 69
+				})
+				.expect(200)
+				.end(function(err, res){
+					if(err) return done(err);
+					expect(res.body).to.have.ownProperty('nostock', true);
+					done();
+				})
+			})
+		})
 	})
 });
