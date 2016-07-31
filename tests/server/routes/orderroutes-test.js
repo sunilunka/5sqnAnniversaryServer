@@ -66,10 +66,7 @@ describe('Order routes', function(){
   describe('GET "/""', function(){
 
     it('sends a 401 response if the user is not a manager', function(done){
-      guestAgent.get('/api/orders')
-      .send({
-        user_id: testIdNonManager
-      })
+      guestAgent.get('/api/orders?user_id=' + testIdNonManager)
       .expect(401)
       .end(function(err, res){
         if(err) return done(err);
@@ -78,10 +75,7 @@ describe('Order routes', function(){
     })
 
     it('sends a 200 response with an array of results if user is a manager', function(done){
-      guestAgent.get('/api/orders')
-      .send({
-        user_id: testId
-      })
+      guestAgent.get('/api/orders?user_id=' + testId)
       .expect(200)
       .end(function(err, res){
         if(err) return done(err);

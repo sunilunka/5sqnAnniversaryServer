@@ -48,7 +48,7 @@
     ],
     "lineItemCount":5,
     "totalPrice":"145.00",
-    "paymentType": "cash",
+    "paymentMethod": "cash",
     "email": "sunil.unka@gmail.com"
   },
   "seedProducts": [

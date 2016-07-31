@@ -66,7 +66,7 @@ var orderSchema = new Schema({
     type: String,
     required: true
   },
-  paymentType: {
+  paymentMethod: {
     type: String,
     required: true,
     enum: ['cash', 'deposit'],

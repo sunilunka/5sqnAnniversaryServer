@@ -36,7 +36,7 @@ router.param('userId', function(req, res, next, id){
 
 router.get('/:userId/orders', function(req, res, next){
   Order.find({
-    user_id: req.user.user_id
+    user_id: req.query.user_id
   })
   .exec()
   .then(function(orders){

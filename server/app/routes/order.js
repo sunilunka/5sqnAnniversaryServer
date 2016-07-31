@@ -9,7 +9,7 @@ var orderHelpers = require('./order-route-helpers');
 var _ = require('lodash');
 
 router.get('/', function(req, res, next){
-  fireMethods.checkAuthorisedManager(req.body['user_id'])
+  fireMethods.checkAuthorisedManager(req.query['user_id'])
   .then(function(authorised){
     if(authorised){
       Order.find({}).exec()
@@ -33,16 +33,16 @@ router.post('/new', function(req, res, next){
     return req.body;
   })
   .then(function(order){
-    orderHelpers.modifyProductStock(order.products)
+    return orderHelpers.modifyProductStock(order.products)
     .then(function(modifiedProducts){
-      orderHelpers.generateOrderRef()
-      .then(function(refString){
-        order.order_ref = refString;
-        return Order.create(order)
-      })
-      .then(function(newOrder){
-        res.status(201).json(newOrder);
-      })
+      return orderHelpers.generateOrderRef()
+    })
+    .then(function(refString){
+      order.order_ref = refString;
+      return Order.create(order)
+    })
+    .then(function(newOrder){
+      res.status(201).json(newOrder);
     })
     .catch(function(err){
       if(err.errors['stock']){
