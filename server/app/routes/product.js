@@ -109,44 +109,7 @@ router.delete('/:productId', function(req, res, next){
   })
 })
 
-router.put('/:productId/stock', function(req, res, next){
-
-  var product = req.product;
-  if(req.body.operation === 'add'){
-    product.updateStock('add', req.body.amount)
-    .then(function(updatedProduct){
-      res.status(200).json(updatedProduct);
-    })
-  }
-
-  if(req.body.operation === 'subtract'){
-    product.updateStock('subtract', req.body.amount)
-    .then(function(result){
-      res.status(200).json(result)
-    })
-    .catch(function(err){
-      if(err.errors['stock']){
-        if(req.product.hasOwnProperty('product_id')){
-          Variant.findById(req.product._id)
-          .then(function(variant){
-            var toSend = variant.toObject();
-            toSend['nostock'] = true;
-            res.status(200).json(toSend);
-          })
-        } else {
-          Product.findById(req.product._id)
-          .then(function(product){
-            var toSend = product.toObject();
-            toSend['nostock'] = true;
-            res.status(200).json(toSend);
-          })
-        }
-      } else {
-        next(err);
-      }
-    })
-  }
-})
+router.put('/:productId/stock', routeHelpers.processAdminStockUpdate)
 
 router.use('/:productId/variants', require('./variant'));
 

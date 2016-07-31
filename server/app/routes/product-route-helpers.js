@@ -1,8 +1,33 @@
 'use strict';
 var mongoose = require('mongoose');
 
+var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var _ = require('lodash');
+
+var noStockResponse = function(res, item){
+  var toSend = item.toObject();
+  toSend['nostock'] = true;
+  res.status(200).json(toSend);
+}
+
+var updateStockErrorHandler = function(err, req, res, next){
+  if(err.errors['stock']){
+    if(req.product.hasOwnProperty('product_id')){
+      Variant.findById(req.product._id)
+      .then(function(variant){
+        noStockResponse(res, variant);
+      })
+    } else {
+      Product.findById(req.product._id)
+      .then(function(product){
+        noStockResponse(res, product)
+      })
+    }
+  } else {
+    next(err);
+  }
+}
 
 module.exports = {
   processVariants: function(parentProduct, variantArray){
@@ -39,6 +64,7 @@ module.exports = {
           return Variant.find({ product_id: parentProduct._id }).exec()
         })
       } else {
+        /* this is the updatedProductVariants argument below */
         return oldVariants;
       }
     })
@@ -61,5 +87,25 @@ module.exports = {
       }
       return Promise.all(variantsToSave);
     })
+  },
+
+  processAdminStockUpdate: function(req, res, next){
+    var product = req.product;
+    if(req.body.operation === 'add'){
+      product.updateStock('add', req.body.amount)
+      .then(function(updatedProduct){
+        res.status(200).json(updatedProduct);
+      })
+    }
+
+    if(req.body.operation === 'subtract'){
+      product.updateStock('subtract', req.body.amount)
+      .then(function(result){
+        res.status(200).json(result)
+      })
+      .catch(function(err){
+        updateStockErrorHandler(err, req, res, next)
+      });
+    }
   }
 }
