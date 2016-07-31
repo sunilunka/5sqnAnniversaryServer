@@ -454,9 +454,9 @@ describe('Products Route', function () {
 			})
 		})
 
-		describe('/:productId/stock', function(){
+		describe('PUT /:productId/stock route', function(){
 
-			it('should add the key "nostock" to the returned product if attempt to remove more items than numberin stock', function(done){
+			it('should add the key "nostock" to the returned product if attempt to remove more items than number in stock', function(done){
 				guestAgent.put('/api/products/' + testProduct._id + '/stock')
 				.send({
 					operation: 'subtract',
