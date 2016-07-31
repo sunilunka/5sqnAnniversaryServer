@@ -82,10 +82,7 @@ describe('User routes', function(){
     describe('GET "/verifyemail"', function(){
 
       it('should return user details if the user exists', function(done){
-        guestAgent.get('/api/users/verifyemail')
-        .send({
-          email: "sunil.unka@gmail.com"
-        })
+        guestAgent.get('/api/users/verifyemail?email=sunil.unka@gmail.com')
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
@@ -95,10 +92,7 @@ describe('User routes', function(){
       })
 
       it('should return 204 if the user does not exist', function(done){
-        guestAgent.get('/api/users/verifyemail')
-        .send({
-          email: "cc@sg.com"
-        })
+        guestAgent.get('/api/users/verifyemail?email=cc@sg.com')
         .expect(204)
         .end(function(err, res){
           if(err) return done(err);

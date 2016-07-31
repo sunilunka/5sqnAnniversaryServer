@@ -10,7 +10,7 @@ var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var Order = mongoose.model('Order');
 
 router.get('/verifyemail', function(req, res, next){
-  fireMethods.getEmailAssociatedUser(req.body.email)
+  fireMethods.getEmailAssociatedUser(req.query.email)
   .then(function(userDetails){
     if(!userDetails){
       res.sendStatus(204)
