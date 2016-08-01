@@ -89,7 +89,7 @@ router.put('/:orderId', function(req, res, next){
     req.order.save()
     .then(function(updatedOrder){
       res.status(200).json(updatedOrder);
-    })
+    });
   }
 })
 
