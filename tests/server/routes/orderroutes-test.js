@@ -237,13 +237,13 @@ describe('Order routes', function(){
       it('should apply changes and return updated order', function(done){
         guestAgent.put('/api/orders/' + savedOrder._id)
         .send({
-          orderStatus: 'ready',
+          orderStatus: 'dispatched',
           paymentState: 'paid'
         })
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
-          expect(res.body).to.have.property('orderStatus', 'ready');
+          expect(res.body).to.have.property('orderStatus', 'dispatched');
           expect(res.body).to.have.property('paymentState', 'paid');
           done();
         })

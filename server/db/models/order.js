@@ -80,8 +80,8 @@ var orderSchema = new Schema({
   orderStatus: {
     type: String,
     required: true,
-    enum: ['processing', 'packaged', 'dispatched', 'delivered', 'ready', 'collected', 'cancelled'],
-    default: 'processing'
+    enum: ['received', 'dispatched', 'collected', 'cancelled'],
+    default: 'received'
   },
   trackingData: {
     type: String
