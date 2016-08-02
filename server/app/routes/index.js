@@ -9,6 +9,7 @@ var cors = require(path.join(__dirname, '../configure/cors-middleware'))
 
 router.use('/', cors);
 router.use('/products', require('./product'));
+router.use('/variants', require('./variant'));
 router.use('/orders', require('./order'));
 router.use('/users', require('./user'));
 

@@ -111,7 +111,6 @@ router.delete('/:productId', function(req, res, next){
 
 router.put('/:productId/stock', routeHelpers.processAdminStockUpdate)
 
-router.use('/:productId/variants', require('./variant'));
 
 
 module.exports = router;

@@ -13,16 +13,10 @@ var noStockResponse = function(res, item){
 
 var updateStockErrorHandler = function(err, req, res, next){
   if(err.errors['stock']){
-    if(req.product.hasOwnProperty('product_id')){
-      Variant.findById(req.product._id)
-      .then(function(variant){
-        noStockResponse(res, variant);
-      })
+    if(req.hasOwnProperty('variant')){
+      noStockResponse(res, req.variant);
     } else {
-      Product.findById(req.product._id)
-      .then(function(product){
-        noStockResponse(res, product)
-      })
+      noStockResponse(res, req.product)
     }
   } else {
     next(err);
@@ -90,7 +84,13 @@ module.exports = {
   },
 
   processAdminStockUpdate: function(req, res, next){
-    var product = req.product;
+    var product;
+    if(req.hasOwnProperty('variant')){
+      product = req.variant;
+    } else {
+      product = req.product;
+    }
+
     if(req.body.operation === 'add'){
       product.updateStock('add', req.body.amount)
       .then(function(updatedProduct){

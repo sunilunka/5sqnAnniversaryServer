@@ -18,6 +18,9 @@ var clearDB = require('mocha-mongoose')(dbURI);
 var supertest = require('supertest');
 var app = require('../../../server/app');
 
+var testId = 'I0cr7ykBtISiw4kO68sESRfTqTp1';
+var testIdNonManager = 'zj64GsClZ5YYGg4hFmhMZmG4b183';
+
 describe('Product variants route', function(){
 
   beforeEach('Establish DB connection', function (done) {
@@ -36,35 +39,60 @@ describe('Product variants route', function(){
   });
 
   var testProduct;
+  var testVariant;
 
-  beforeEach('Create dummy product and variant', function(done){
-    Product.create({
-      title: "T-shirt",
-      description: "A rad t-shirt",
-      options: {
-        size: ['XS', 'SM', 'M', 'L', 'XL'],
-        color: ['black', 'blue']
-      }
-    })
-    .then(function(product){
-      testProduct = product;
-      done();
-    })
-    .catch(done);
-  })
-
-  var rawVariant = {
-    options: {
-      size: 'SM',
-      color: 'blue'
-    },
-    stock: 20,
-    price: 1000
-  }
 
 
   describe('PUT /:variantId/stock', function(){
-    it('should update stock')
+
+    beforeEach('Create dummy product and variant', function(done){
+
+      var rawVariant = {
+        options: {
+          size: 'SM',
+          color: 'blue'
+        },
+        stock: 20,
+        price: "10.00"
+      }
+
+      var body = {
+        user_id: testId,
+        product: {
+          title: "T-shirt",
+          description: "A rad t-shirt",
+          options: {
+            size: ['XS', 'SM', 'M', 'L', 'XL'],
+            color: ['black', 'blue']
+          },
+          variants: [rawVariant]
+        }
+      }
+
+      guestAgent.post('/api/products/new')
+      .send(body)
+      .expect(201)
+      .end(function(err, res){
+        if(err) return done(err);
+        testProduct = res.body;
+        testVariant = res.body.variants[0];
+        done();
+      })
+    })
+
+    it('should add the key "nostock" to the returned product if attempt to remove more items than number in stock', function(done){
+      guestAgent.put('/api/variants/' + testVariant + '/stock')
+      .send({
+        operation: 'subtract',
+        amount: 69
+      })
+      .expect(200)
+      .end(function(err, res){
+        if(err) return done(err);
+        expect(res.body).to.have.ownProperty('nostock', true);
+        done();
+      })
+    })
   })
 
 
