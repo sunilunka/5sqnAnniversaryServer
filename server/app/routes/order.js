@@ -12,10 +12,18 @@ router.get('/', function(req, res, next){
   fireMethods.checkAuthorisedManager(req.query['user_id'])
   .then(function(authorised){
     if(authorised){
-      Order.find({}).exec()
-      .then(function(orders){
-        res.status(200).json(orders);
-      })
+      if(req.query.hasOwnProperty('search')){
+        var query = JSON.parse(req.query.search);
+        Order.find(query).exec()
+        .then(function(results){
+          res.status(200).json(results);
+        })
+      } else {
+        Order.find({}).exec()
+        .then(function(orders){
+          res.status(200).json(orders);
+        })
+      }
     } else {
       res.sendStatus(401);
     }
