@@ -11,7 +11,9 @@ var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var _ = require('lodash');
 
 router.get('/', function(req, res, next){
-  Product.find({}).exec()
+  Product.find({})
+  .populate('variants')
+  .exec()
   .then(function(products){
     res.status(200).json(products);
   })
