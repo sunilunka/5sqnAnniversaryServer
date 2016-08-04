@@ -101,6 +101,29 @@ describe('User routes', function(){
       })
     })
 
+    describe('GET "/:userId"', function(){
+
+      it('should return the user details associated with the id', function(done){
+        guestAgent.get('/api/users/' + testId)
+        .expect(200)
+        .end(function(err, res){
+          if(err) return done(err);
+          expect(res.body).to.have.property('firstName', 'Sunil');
+          done();
+        })
+      })
+
+      it('should return an error if no user is found', function(done){
+        guestAgent.get('/api/users/r@ndom1d')
+        .expect(500)
+        .end(function(err, res){
+          if(err) return done(err);
+          expect(Object.keys(res.body)).to.have.length(0);
+          done();
+        })
+      })
+    })
+
     describe('GET "/:userId/orders"', function(){
 
       it('should return an array of the user orders', function(done){

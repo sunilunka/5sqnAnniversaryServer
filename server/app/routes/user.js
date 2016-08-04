@@ -25,6 +25,7 @@ router.param('userId', function(req, res, next, id){
   .then(function(userDetails){
     if(userDetails){
       userDetails.user_id = id;
+      userDetails.uid = id;
       req.user = userDetails;
       next();
     } else {
@@ -32,6 +33,10 @@ router.param('userId', function(req, res, next, id){
     }
   })
 
+})
+
+router.get('/:userId', function(req, res, next){
+  res.status(200).json(req.user);
 })
 
 router.get('/:userId/orders', function(req, res, next){
