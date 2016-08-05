@@ -5,6 +5,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var Order = mongoose.model('Order');
+var mailer = require(path.join(__dirname, '../email'));
 var orderHelpers = require('./order-route-helpers');
 var _ = require('lodash');
 
@@ -50,6 +51,7 @@ router.post('/new', function(req, res, next){
       return Order.create(order)
     })
     .then(function(newOrder){
+      // mailer.generateOrderSuccessEmail(newOrder);
       res.status(201).json(newOrder);
     })
     .catch(function(err){

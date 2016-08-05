@@ -92,7 +92,7 @@ describe('User routes', function(){
       })
 
       it('should return 204 if the user does not exist', function(done){
-        guestAgent.get('/api/users/verifyemail?email=cc@sg.com')
+        guestAgent.get('/api/users/verifyemail?email=beast@wars.com')
         .expect(204)
         .end(function(err, res){
           if(err) return done(err);

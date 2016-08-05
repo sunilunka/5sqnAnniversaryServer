@@ -8,6 +8,7 @@ var _ = require('lodash');
 var noStockResponse = function(res, item){
   var toSend = item.toObject();
   toSend['nostock'] = true;
+  toSend['stock'] = 0;
   res.status(200).json(toSend);
 }
 
