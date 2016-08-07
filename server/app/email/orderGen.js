@@ -2,8 +2,10 @@
 
 var mailHelper = require('sendgrid').mail;
 
+var templateMethods = require('./templating_methods');
+
 var generateOrderEmailBody = function(orderObj){
-  
+  templateMethods.compileOrder(orderObj);
 }
 
 var orderEmailGenerator = function(sendGrid, orderObj){
@@ -34,16 +36,18 @@ var orderEmailGenerator = function(sendGrid, orderObj){
     body: message.toJSON()
   })
 
-  return sendGrid.API(request)
-  .then(function(response){
-    console.log("RESPONSE: ", response.statusCode)
-    console.log("RESPONSE BODY: ", response.body)
-    return response.statusCode;
-  })
-  .catch(function(err){
-    console.log("ERROR: ", err);
-    return err;
-  })
+  generateOrderEmailBody(orderObj);
+
+  // return sendGrid.API(request)
+  // .then(function(response){
+  //   console.log("RESPONSE: ", response.statusCode)
+  //   console.log("RESPONSE BODY: ", response.body)
+  //   return response.statusCode;
+  // })
+  // .catch(function(err){
+  //   console.log("ERROR: ", err);
+  //   return err;
+  // })
 
 
   // return message;
