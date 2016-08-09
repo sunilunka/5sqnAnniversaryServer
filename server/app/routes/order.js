@@ -51,7 +51,7 @@ router.post('/new', function(req, res, next){
       return Order.create(order)
     })
     .then(function(newOrder){
-      // mailer.generateOrderSuccessEmail(newOrder);
+      mailer.generateOrderSuccessEmail(newOrder);
       res.status(201).json(newOrder);
     })
     .catch(function(err){
