@@ -28,8 +28,14 @@ describe('Order email functionality', function(){
       expect(mailer.generateOrderSuccessEmail).to.be.a('function');
     })
 
-    it('should return a new mail object', function(){
-    return expect(mailer.generateOrderSuccessEmail(testOrder)).to.eventually.be.a('Object')
+    it('should return a new mail object', function(done){
+      mailer.generateOrderSuccessEmail(testOrder)
+      .then(function(status){
+        /* Expect 200 based on sandbox mode for sendgrid for successful submission */
+        expect(status).to.equal(200);
+        done();
+      })
+      .catch(done);
     })
   })
 })

@@ -10,8 +10,6 @@ var generateOrderEmailBody = function(orderObj){
 
 var orderEmailGenerator = function(sendGrid, orderObj){
 
-  console.log("SEND GRID: ", sendGrid);
-
   var message = new mailHelper.Mail();
 
   message.setFrom(new mailHelper.Email('orders@5sqnrnzaf.firebaseapp.com'));
@@ -24,9 +22,12 @@ var orderEmailGenerator = function(sendGrid, orderObj){
   personalization.addCc(cc_address);
   personalization.setSubject('Your order for 5 SQN Anniversary products has been recieved.');
 
+  message.addPersonalization(personalization);
+
   var messageSettings = new mailHelper.MailSettings();
 
   var sandbox_mode = new mailHelper.SandBoxMode(true);
+  messageSettings.setSandBoxMode(sandbox_mode);
 
   message.addMailSettings(messageSettings);
 
@@ -39,8 +40,6 @@ var orderEmailGenerator = function(sendGrid, orderObj){
     path: '/v3/mail/send',
     body: message.toJSON()
   })
-
-  generateOrderEmailBody(orderObj);
 
   return sendGrid.API(request)
   .then(function(response){
