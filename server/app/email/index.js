@@ -10,7 +10,11 @@ var mailHelper = require('sendgrid').mail;
 var mailer = {};
 
 mailer.generateOrderSuccessEmail = function(order){
-  return require('./orderGen')(sg, order);
+  return require('./orderEmailGenerator')(sg, order);
+}
+
+mailer.generateNewAttendeeEmail = function(userData){
+  return require('./newAttendeeEmailGenerator')(sg, userData);
 }
 
 module.exports = mailer;

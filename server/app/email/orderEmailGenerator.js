@@ -53,9 +53,6 @@ var orderEmailGenerator = function(sendGrid, orderObj){
   })
 
 
-  // return message;
-
-
 
 }
 
