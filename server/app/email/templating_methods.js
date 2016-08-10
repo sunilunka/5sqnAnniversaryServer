@@ -7,7 +7,7 @@ var processOrderItems = function(orderObj){
 
   var checkDisplayOptions = function(product){
     if(!product['display_options']){
-      return 'N/A'
+      return ''
     } else {
       return product.display_options;
     }

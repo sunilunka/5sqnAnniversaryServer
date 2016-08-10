@@ -13,6 +13,11 @@ var variantSchema = new Schema({
     type: {},
     required: true
   },
+  deliverable: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   stock: {
     type: Number,
     required: true,

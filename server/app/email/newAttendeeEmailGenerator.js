@@ -33,7 +33,7 @@ var newAttendeeEmailGenerator = function(sendGrid, userData){
 
   message.addMailSettings(messageSettings);
 
-  var plainMessageContent = new mailHelper.Content('plain/text', plainTextMethods.compileNewRegister(userData))
+  var plainMessageContent = new mailHelper.Content('text/plain', plainTextMethods.compileNewRegister(userData))
 
   var messageContent = new mailHelper.Content('text/html', templateMethods.compileNewRegister(userData));
 

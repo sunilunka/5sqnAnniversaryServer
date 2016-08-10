@@ -33,6 +33,7 @@ module.exports = {
       if(!variantObj['price']){
         variantObj.price = parentProduct.price;
       }
+      variantObj.deliverable = parentProduct.deliverable;
       return variantObj;
     })
     return toStore;
@@ -72,12 +73,14 @@ module.exports = {
         if(variantUpdateIndex > -1){
           _.assign(variant, newVariants[variantUpdateIndex]);
           newVariants.splice(variantUpdateIndex, 1);
+          variant.set({ deliverable: parentProduct.deliverable });
           return variant.save()
         }
       })
 
       if(newVariants){
         newVariants.forEach(function(unsavedVariant){
+          unsavedVariant.deliverable = parentProduct.deliverable;
           variantsToSave.push(Variant.create(unsavedVariant));
         })
       }

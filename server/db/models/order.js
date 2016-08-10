@@ -62,6 +62,10 @@ var orderSchema = new Schema({
     type: Number,
     required: true
   },
+  shippingPrice: {
+    type: String
+  },
+
   totalPrice: {
     type: String,
     required: true
@@ -87,7 +91,8 @@ var orderSchema = new Schema({
     type: String
   },
   deliveryMethod: {
-    type: String
+    type: String,
+    enum: ["Pick Up", "Post/Courier"]
   },
   address: {
     type: Schema.Types.Mixed

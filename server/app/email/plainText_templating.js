@@ -44,15 +44,15 @@ plainTextMethods.emailOrderIntroHeader = function(orderObj){
 }
 
 plainTextMethods.emailOrderRef = function(orderObj){
-  return 'Please make sure you keep a note of your order number:\n\t ===>' + orderObj.order_ref + '<===\n\nWe will use this to verify your order on collection.\n\n'
+  return 'Please make sure you keep a note of your order number:\n\t * ' + orderObj.order_ref + ' *\n\nWe will use this to verify your order on collection.\n\n'
 }
 
 plainTextMethods.emailOrderDetails = function(orderObj){
-  return 'Order Details\n============\n\nNAME: \t' + orderObj.recipient + '\nDelivery Method: \t' + orderObj.deliveryMethod + '\n\n';
+  return 'Order Details\n-------------\n\nNAME: \t' + orderObj.recipient + '\nDelivery Method: \t' + orderObj.deliveryMethod + '\n\n';
 }
 
 plainTextMethods.emailOrderTable = function(orderObj){
-  return 'Title\tVariant\tQuantity\tSubtotal\n-----\t-------\t--------\t--------\t' + checkShippingPrice(orderObj) + processOrderItems(orderObj) + 'Total Price:\t$' + orderObj.totalPrice;
+  return 'Title | Variant | Quantity | Subtotal | \n----- | ------- | -------- | -------- | ' + checkShippingPrice(orderObj) + processOrderItems(orderObj) + 'Total Price:\t$' + orderObj.totalPrice + '\n\n';
 }
 
 plainTextMethods.emailOrderInstructions = function(orderObj){
