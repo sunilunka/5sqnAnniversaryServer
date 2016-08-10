@@ -5,19 +5,20 @@ var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var _ = require('lodash');
 
-var noStockResponse = function(res, item){
+var noStockResponse = function(res, item, originalStock){
+
   var toSend = item.toObject();
   toSend['nostock'] = true;
-  toSend['stock'] = 0;
+  toSend['stock'] = originalStock;
   res.status(200).json(toSend);
 }
 
 var updateStockErrorHandler = function(err, req, res, next){
   if(err.errors['stock']){
     if(req.hasOwnProperty('variant')){
-      noStockResponse(res, req.variant);
+      noStockResponse(res, req.variant, req.originalStock);
     } else {
-      noStockResponse(res, req.product)
+      noStockResponse(res, req.product, req.originalStock);
     }
   } else {
     next(err);
@@ -91,6 +92,8 @@ module.exports = {
     } else {
       product = req.product;
     }
+
+    req.originalStock = product.stock;
 
     if(req.body.operation === 'add'){
       product.updateStock('add', req.body.amount)

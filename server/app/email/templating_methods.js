@@ -28,8 +28,8 @@ templateMethods.emailOrderIntroHeader = function(orderObj){
   return  '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + firstName + ' your order has been submitted!</h3>'
 }
 
-templateMethods.emailOrderRef = function(orderRef){
-  return '<table style="width:98%;"><tbody style="background-color:#EFEFEF;"><tr><td><h4 style="background-color:#EFEFEF; color:#808080; padding: 10px; font-family: sans-serif; margin: 0px">Please make sure you keep a note of your order number: </h4></td></tr><tr><td><h3 style="background-color:#EFEFEF; color:#68AFC3; padding: 10px; font-family: sans-serif; margin: 0px">' + orderRef + '</h3></td></tr><tr><td style="background-color:#EFEFEF; color:#808080; padding:5px; font-family: sans-serif; margin: 0px">We will use this to verify your order on collection.</td></tr></tbody></table>'
+templateMethods.emailOrderRef = function(orderObj){
+  return '<table style="width:98%;"><tbody style="background-color:#EFEFEF;"><tr><td><h4 style="background-color:#EFEFEF; color:#808080; padding: 10px; font-family: sans-serif; margin: 0px">Please make sure you keep a note of your order number: </h4></td></tr><tr><td><h3 style="background-color:#EFEFEF; color:#68AFC3; padding: 10px; font-family: sans-serif; margin: 0px">' + orderObj.order_ref + '</h3></td></tr><tr><td style="background-color:#EFEFEF; color:#808080; padding:5px; font-family: sans-serif; margin: 0px">We will use this to verify your order on collection.</td></tr></tbody></table>'
 }
 
 templateMethods.emailOrderDetails = function(orderObj){

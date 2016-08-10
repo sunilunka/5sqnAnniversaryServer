@@ -9,7 +9,6 @@ module.exports = {
      return self.save();
    } else if(operation === 'subtract'){
      self.stock -= amount;
-     // if(self.stock < 0) self.stock = 0;
      return self.save();
     }
   },
