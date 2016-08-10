@@ -54,7 +54,7 @@ module.exports = {
   amendOrderQuantities: function(itemsArray){
 
     var amendItemQuantity = function(availableQuantity, item){
-      if(availableQuantity === item.quantity){
+      if(availableQuantity >= item.quantity){
         return item;
       } else {
         item.amendedQuantity = availableQuantity;

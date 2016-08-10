@@ -86,7 +86,7 @@ var orderSchema = new Schema({
   trackingData: {
     type: String
   },
-  pickUpDetails: {
+  deliveryMethod: {
     type: String
   },
   address: {

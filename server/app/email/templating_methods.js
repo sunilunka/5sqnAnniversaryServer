@@ -4,8 +4,17 @@ var path = require('path');
 var templateMethods = {};
 
 var processOrderItems = function(orderObj){
+
+  var checkDisplayOptions = function(product){
+    if(!product['display_options']){
+      return 'N/A'
+    } else {
+      return product.display_options;
+    }
+  }
+
   var orderTable = orderObj.products.map(function(product){
-    return '<tr><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.title + '</td><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.display_options + '</td><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.quantity + '</td><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.subtotal + '</td></tr>';
+    return '<tr><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.title + '</td><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + checkDisplayOptions(product) + '</td><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.quantity + '</td><td style="padding: 5px; color: #808080; background-color: #EFEFEF; font-family: sans-serif">' + product.subtotal + '</td></tr>';
   })
 
   return '<tbody>' + orderTable.join('') + '</tbody>';

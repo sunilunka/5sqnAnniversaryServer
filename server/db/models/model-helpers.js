@@ -31,7 +31,7 @@ module.exports = {
     .select('stock')
     .exec()
     .then(function(item){
-      if(requestedStock < item.stock){
+      if(requestedStock <= item.stock){
         return requestedStock;
       } else {
         return item.stock;
