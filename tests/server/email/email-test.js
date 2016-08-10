@@ -68,4 +68,5 @@ describe('Order email functionality', function(){
       .catch(done);
     })
   })
+
 })

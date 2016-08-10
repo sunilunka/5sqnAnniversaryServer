@@ -3,9 +3,14 @@
 var mailHelper = require('sendgrid').mail;
 
 var templateMethods = require('./templating_methods');
+var plainTextMethods = require('./plainText_templating');
 
 var generateOrderEmailBody = function(orderObj){
   return templateMethods.compileOrder(orderObj);
+}
+
+var generatePlainOrder = function(orderObj){
+  return plainTextMethods.compileOrder(orderObj);
 }
 
 var orderEmailGenerator = function(sendGrid, orderObj){
@@ -31,8 +36,11 @@ var orderEmailGenerator = function(sendGrid, orderObj){
 
   message.addMailSettings(messageSettings);
 
+  var plainMessageContent = new mailHelper.Content('text/plain', generatePlainOrder(orderObj))
+
   var messageContent = new mailHelper.Content('text/html', generateOrderEmailBody(orderObj));
 
+  message.addContent(plainMessageContent);
   message.addContent(messageContent);
 
   var request = sendGrid.emptyRequest({

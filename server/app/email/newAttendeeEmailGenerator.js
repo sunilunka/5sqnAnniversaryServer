@@ -4,6 +4,8 @@ var mailHelper = require('sendgrid').mail;
 
 var templateMethods = require('./templating_methods');
 
+var plainTextMethods = require('./plainText_templating');
+
 var newAttendeeEmailGenerator = function(sendGrid, userData){
 
   var displayName = function(first, last){
@@ -31,8 +33,11 @@ var newAttendeeEmailGenerator = function(sendGrid, userData){
 
   message.addMailSettings(messageSettings);
 
+  var plainMessageContent = new mailHelper.Content('plain/text', plainTextMethods.compileNewRegister(userData))
+
   var messageContent = new mailHelper.Content('text/html', templateMethods.compileNewRegister(userData));
 
+  message.addContent(plainMessageContent);
   message.addContent(messageContent);
 
   var request = sendGrid.emptyRequest({

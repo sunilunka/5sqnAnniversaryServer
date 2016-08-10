@@ -1,1 +1,1 @@
-require('./orderEmail-test.js');
+require('./email-test.js');
