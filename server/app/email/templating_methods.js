@@ -66,7 +66,7 @@ templateMethods.registerBody = function(){
 }
 
 templateMethods.registerBilling = function(accountNumber){
-  return '<p style="background-color: #EFEFEF; color: #808080; padding:5px; margin: 0px; font-family: sans-serif"><strong>Payments for tickets can be made to <em>' + accountNumber + '</em></strong></p>'
+  return '<p style="background-color: #EFEFEF; color: #808080; padding:5px; margin: 0px; font-family: sans-serif"><strong>Payments for tickets and orders can be made to <em>' + accountNumber + '</em></strong></p>'
 }
 
 templateMethods.registerFooter = function(){
