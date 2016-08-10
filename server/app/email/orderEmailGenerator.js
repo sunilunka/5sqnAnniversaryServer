@@ -17,9 +17,9 @@ var orderEmailGenerator = function(sendGrid, orderObj){
   var personalization = new mailHelper.Personalization();
 
   var to_address = new mailHelper.Email(orderObj.email, orderObj.recipient);
-  var cc_address = new mailHelper.Email('test@test.com')
+  // var cc_address = new mailHelper.Email('test@test.com')
   personalization.addTo(to_address);
-  personalization.addCc(cc_address);
+  // personalization.addCc(cc_address);
   personalization.setSubject('Your order for 5 SQN Anniversary products has been recieved.');
 
   message.addPersonalization(personalization);
