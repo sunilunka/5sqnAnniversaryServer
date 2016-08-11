@@ -49,7 +49,8 @@ plainTextMethods.emailOrderRef = function(orderObj){
 
 plainTextMethods.emailOrderDetails = function(orderObj){
   if(orderObj.deliveryMethod === 'Post/Courier'){
-    return 'Order Details\n-------------\n\nNAME: \t' + orderObj.recipient + '\nDelivery Method: \t' + orderObj.deliveryMethod + '\nDelivery Address:\t' + orderObj.address.line_one +'\n\t' + orderObj.address.line_two + '\n\t' + orderObj.address.city + '\n\t' + orderObj.address.province + '\n\t' + orderObj.address.post_code + '\t\n';
+    return 'Order Details\n-------------\n\nNAME: \t' + orderObj.recipient + '\nDelivery Method: \t' + orderObj.deliveryMethod + '\nDelivery Address:\t' + orderObj.address.line_one +'\n\t' + orderObj.address.line_two + '\n\t' + orderObj.address.city + '\n\t' + orderObj.address.province + '\n\t'
+    + orderObj.address.post_code + '\t\n';
   } else {
     return 'Order Details\n-------------\n\nNAME: \t' + orderObj.recipient + '\nDelivery Method: \t' + orderObj.deliveryMethod + '\n\n';
   }
