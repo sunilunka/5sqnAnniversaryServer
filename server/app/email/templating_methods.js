@@ -3,6 +3,16 @@ var path = require('path');
 
 var templateMethods = {};
 
+var getFirstName = function(order){
+  var firstName;
+  if(order['recipient']){
+    firstName = order.recipient.split(' ')[0];
+  } else {
+    firstName = ','
+  }
+  return firstName;
+}
+
 var processOrderItems = function(orderObj){
 
   var checkDisplayOptions = function(product){
@@ -41,14 +51,7 @@ templateMethods.emailHtmlHeader = function(titleText){
 templateMethods.emailHeader = '<body><h2 style="background-color:#808080; color:#EFEFEF; padding: 10px; font-family: sans-serif;">5 Squadron - Celebrating 75 Years serving New Zealand</h2>'
 
 templateMethods.emailOrderIntroHeader = function(orderObj){
-  var firstName;
-  if(orderObj['recipient']){
-    firstName = orderObj.recipient.split(' ')[0];
-  } else {
-    firstName = ','
-  }
-
-  return  '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + firstName + ' your order has been submitted!</h3>'
+  return  '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + getFirstName(orderObj) + ' your order has been submitted!</h3>'
 }
 
 templateMethods.emailOrderRef = function(orderObj){
@@ -89,6 +92,10 @@ templateMethods.registerFooter = function(){
 
 templateMethods.compileNewRegister = function(userData){
   return (templateMethods.emailHtmlHeader('You are now registered for the 5SQN Anniversary Events') + templateMethods.emailHeader + templateMethods.registerIntro(userData) + templateMethods.registerBody() + templateMethods.registerBilling('12-3085-XXXXXX-XXX')) + templateMethods.registerFooter() + '</body></html>';
+}
+
+templateMethods.dispatchEmailHeader = function(order){
+  return templateMethods.emailHeader + ''
 }
 
 

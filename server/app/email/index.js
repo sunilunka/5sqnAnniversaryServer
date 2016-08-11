@@ -17,4 +17,8 @@ mailer.generateNewAttendeeEmail = function(userData){
   return require('./newAttendeeEmailGenerator')(sg, userData);
 }
 
+mailer.generateOrderDispatchEmail = function(order){
+  return require('./dispatchedOrderEmailGenerator')();
+}
+
 module.exports = mailer;
