@@ -98,6 +98,7 @@ router.put('/:orderId', function(req, res, next){
     _.assign(req.order, req.body);
     req.order.save()
     .then(function(updatedOrder){
+      orderHelpers.emailOrderStateUpdate(req.body, updatedOrder);
       res.status(200).json(updatedOrder);
     });
   }

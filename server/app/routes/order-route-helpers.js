@@ -87,11 +87,11 @@ module.exports = {
     return Promise.all(stockToUpdate);
   },
 
-  orderUpdateEmail: function(requestOrder, savedOrder){
+  emailOrderStateUpdate: function(requestOrder, savedOrder){
     if(requestOrder['trackingData'] && savedOrder.orderStatus === 'dispatched'){
-
+      return mailer.generateOrderDispatchEmail(savedOrder);
     } else if((requestOrder['paymentState']) && (savedOrder.paymentState === 'paid')){
-
+      return mailer.generateOrderPaymentConfirmation(savedOrder);
     }
   }
 

@@ -105,7 +105,7 @@ templateMethods.emailDispatchedBody = function(order){
 }
 
 templateMethods.generateOrderPaidBody = function(order){
-  return '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi, ' + templateMethods.getFirstName(order) + ' we have received your payment of <span style="color: #808080"><strong>' + order.totalPrice + '</strong></span> for order <strong>' + order.order_ref + '</strong>.</h3><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">'  + plainTextMethods.processOrderPayment(order) + '</p>' + templateMethods.htmlEmailFooter();
+  return '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi, ' + templateMethods.getFirstName(order) + ' we have received your payment of <span style="color: #808080"><strong>$' + order.totalPrice + '</strong></span> for order <strong>' + order.order_ref + '</strong>.</h3><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">'  + plainTextMethods.processOrderPayment(order) + '</p>';
 }
 
 templateMethods.htmlEmailFooter = function(){

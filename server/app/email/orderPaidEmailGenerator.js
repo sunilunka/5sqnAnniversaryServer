@@ -47,6 +47,7 @@ var emailGenerator = function(sendGrid, order){
 
   return sendGrid.API(request)
   .then(function(response){
+    console.log('API RESPONSE: ', response.statusCode);
     return response.statusCode;
   })
   .catch(function(err){
