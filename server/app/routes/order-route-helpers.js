@@ -8,6 +8,7 @@ var Product = mongoose.model('Product');
 var Variant = mongoose.model('Variant');
 var Order = mongoose.model('Order');
 var _ = require('lodash');
+var mailer = require(path.join(__dirname, '../email'));
 
 var modifyMultipleProducts = function(product, operation, requestedAmount){
   if(product.hasOwnProperty('variant_id')){
@@ -84,6 +85,14 @@ module.exports = {
       return modifyMultipleProducts(product, 'add', amountToAdd);
     })
     return Promise.all(stockToUpdate);
+  },
+
+  orderUpdateEmail: function(requestOrder, savedOrder){
+    if(requestOrder['trackingData'] && savedOrder.orderStatus === 'dispatched'){
+
+    } else if((requestOrder['paymentState']) && (savedOrder.paymentState === 'paid')){
+
+    }
   }
 
 

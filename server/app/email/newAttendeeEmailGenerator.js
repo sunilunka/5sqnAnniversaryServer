@@ -29,7 +29,7 @@ var newAttendeeEmailGenerator = function(sendGrid, userData){
   var messageSettings = new mailHelper.MailSettings();
 
   var sandbox_mode = new mailHelper.SandBoxMode(true);
-  // messageSettings.setSandBoxMode(sandbox_mode);
+  messageSettings.setSandBoxMode(sandbox_mode);
 
   message.addMailSettings(messageSettings);
 

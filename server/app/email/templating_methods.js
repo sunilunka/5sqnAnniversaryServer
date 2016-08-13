@@ -1,9 +1,11 @@
 'use strict';
 var path = require('path');
 
+var plainTextMethods = require('./plainText_templating');
+
 var templateMethods = {};
 
-var getFirstName = function(order){
+templateMethods.getFirstName = function(order){
   var firstName;
   if(order['recipient']){
     firstName = order.recipient.split(' ')[0];
@@ -51,7 +53,11 @@ templateMethods.emailHtmlHeader = function(titleText){
 templateMethods.emailHeader = '<body><h2 style="background-color:#808080; color:#EFEFEF; padding: 10px; font-family: sans-serif;">5 Squadron - Celebrating 75 Years serving New Zealand</h2>'
 
 templateMethods.emailOrderIntroHeader = function(orderObj){
-  return  '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + getFirstName(orderObj) + ' your order has been submitted!</h3>'
+  return  '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + templateMethods.getFirstName(orderObj) + ' your order has been submitted!</h3>'
+}
+
+templateMethods.emailDispatchedHeader = function(orderObj){
+  return '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + templateMethods.getFirstName(orderObj) + ' your order <span style="color: #808080;"><strong>' + orderObj.order_ref + '</strong></span> has been dispatched and should be with you in a few days.</h3>'
 }
 
 templateMethods.emailOrderRef = function(orderObj){
@@ -71,7 +77,7 @@ templateMethods.emailOrderInstructions = function(orderObj){
 }
 
 templateMethods.compileOrder = function(orderObj){
-  return (templateMethods.emailHtmlHeader('5 SQN Anniversary Order Information') + templateMethods.emailHeader + templateMethods.emailOrderIntroHeader(orderObj) + templateMethods.emailOrderRef(orderObj) + templateMethods.emailOrderDetails(orderObj) + templateMethods.emailOrderTable(orderObj) + templateMethods.emailOrderInstructions(orderObj)) + '</body></html>';
+  return (templateMethods.emailHtmlHeader('5 SQN Anniversary Order Information') + templateMethods.emailHeader + templateMethods.emailOrderIntroHeader(orderObj) + templateMethods.emailOrderRef(orderObj) + templateMethods.emailOrderDetails(orderObj) + templateMethods.emailOrderTable(orderObj) + templateMethods.emailOrderInstructions(orderObj)) + templateMethods.htmlEmailFooter() + '</body></html>';
 }
 
 templateMethods.registerIntro = function(userData){
@@ -91,11 +97,19 @@ templateMethods.registerFooter = function(){
 }
 
 templateMethods.compileNewRegister = function(userData){
-  return (templateMethods.emailHtmlHeader('You are now registered for the 5SQN Anniversary Events') + templateMethods.emailHeader + templateMethods.registerIntro(userData) + templateMethods.registerBody() + templateMethods.registerBilling('12-3085-XXXXXX-XXX')) + templateMethods.registerFooter() + '</body></html>';
+  return (templateMethods.emailHtmlHeader('You are now registered for the 5SQN Anniversary Events') + templateMethods.emailHeader + templateMethods.registerIntro(userData) + templateMethods.registerBody() + templateMethods.registerBilling('12-3085-XXXXXX-XXX')) + templateMethods.registerFooter() +  templateMethods.htmlEmailFooter() + '</body></html>';
 }
 
-templateMethods.dispatchEmailHeader = function(order){
-  return templateMethods.emailHeader + ''
+templateMethods.emailDispatchedBody = function(order){
+  return '<p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">The tracking number for the delivery is <strong>' + order.trackingData + '</strong>.</p><p style="background-color: #EFEFEF; color: #808080; padding:5px; margin: 0px; font-family: sans-serif">You can also view the tracking number by logging into the <a href="https://5sqnrnzaf.firebaseapp.com">anniversary website</a> and viewing the order in your profile.</p>'
+}
+
+templateMethods.generateOrderPaidBody = function(order){
+  return '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi, ' + templateMethods.getFirstName(order) + ' we have received your payment of <span style="color: #808080"><strong>' + order.totalPrice + '</strong></span> for order <strong>' + order.order_ref + '</strong>.</h3><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">'  + plainTextMethods.processOrderPayment(order) + '</p>' + templateMethods.htmlEmailFooter();
+}
+
+templateMethods.htmlEmailFooter = function(){
+  return '<p style="background-color: #808080; color: #EFEFEF; font-family: sans-serif; font-size: 10px; padding: 5px;">Please do not reply to this email. The 5SQN Store email server is notification only. If you have an enquiry, please send it to <a href="mailto:5sqntest@nzdf.mil.nz">the committee.</a>Thanks, we look forward to commemorating the anniversary with you.</p>'
 }
 
 

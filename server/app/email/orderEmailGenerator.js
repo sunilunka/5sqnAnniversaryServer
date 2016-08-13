@@ -31,8 +31,8 @@ var orderEmailGenerator = function(sendGrid, orderObj){
 
   var messageSettings = new mailHelper.MailSettings();
 
-  // var sandbox_mode = new mailHelper.SandBoxMode(true);
-  // messageSettings.setSandBoxMode(sandbox_mode);
+  var sandbox_mode = new mailHelper.SandBoxMode(true);
+  messageSettings.setSandBoxMode(sandbox_mode);
 
   message.addMailSettings(messageSettings);
 
@@ -51,7 +51,6 @@ var orderEmailGenerator = function(sendGrid, orderObj){
 
   return sendGrid.API(request)
   .then(function(response){
-    console.log("RESPONSE: ", response.statusCode)
     return response.statusCode;
   })
   .catch(function(err){

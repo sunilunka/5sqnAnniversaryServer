@@ -18,7 +18,20 @@ mailer.generateNewAttendeeEmail = function(userData){
 }
 
 mailer.generateOrderDispatchEmail = function(order){
-  return require('./dispatchedOrderEmailGenerator')();
+  return require('./dispatchedOrderEmailGenerator')(sg, order);
 }
+
+mailer.generateOrderPaymentConfirmation = function(order){
+  return require('./orderPaidEmailGenerator')(sg, order);
+}
+
+mailer.generateGroupEmail = function(users, content){
+
+}
+
+mailer.generateIndividualEmail = function(users, content){
+
+}
+
 
 module.exports = mailer;

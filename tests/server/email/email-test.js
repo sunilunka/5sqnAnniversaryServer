@@ -69,4 +69,39 @@ describe('Order email functionality', function(){
     })
   })
 
+  describe('#generateOrderDispatchEmail', function(){
+
+    it('should be a function', function(){
+      expect(mailer.generateOrderDispatchEmail).to.be.a('function');
+    })
+
+    it('should return 200 (202 in production or when sandbox mode not set) when successful', function(done){
+
+      testOrder.trackingData = 'EA114499210NZL';
+
+      mailer.generateOrderDispatchEmail(testOrder)
+      .then(function(status){
+        expect(status).to.equal(200);
+        done();
+      })
+      .catch(done);
+    })
+
+  })
+
+  describe('#generateOrderPaymentConfirmation', function(){
+    it('should be a function', function(){
+      expect(mailer.generateOrderPaymentConfirmation).to.be.a('function');
+    })
+
+    it('should return 200 (202 in production or when sandbox mode not set) when successful', function(done){
+      mailer.generateOrderPaymentConfirmation(testOrder)
+      .then(function(status){
+        expect(status).to.equal(200);
+        done();
+      })
+      .catch(done);
+    })
+  })
+
 })
