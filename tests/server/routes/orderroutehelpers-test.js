@@ -169,4 +169,11 @@ describe('Order route helper methods', function(){
     })
   })
 
+  describe('#emailOrderStateUpdate()', function(){
+
+    it('should be a function', function(){
+      expect(orderRouteHelpers.emailOrderStateUpdate).to.be.a('function');
+    })  
+  })
+
 })

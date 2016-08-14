@@ -18,8 +18,7 @@ var testOrder = seedData.test_order;
 var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
 
-// var sgApiKey = require(path.join(__dirname, '../../../server/app/configure/authentication/sendgrid.json')).SEND_GRID_AUTH;
-// var sg = require('sendgrid')(sgApiKey);
+
 var supertest = require('supertest');
 var app = require('../../../server/app');
 

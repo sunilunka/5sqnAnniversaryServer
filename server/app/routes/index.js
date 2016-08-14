@@ -12,6 +12,7 @@ router.use('/products', require('./product'));
 router.use('/variants', require('./variant'));
 router.use('/orders', require('./order'));
 router.use('/users', require('./user'));
+router.use('/emails', require('./email'));
 
 
 module.exports = router;
