@@ -114,6 +114,10 @@ plainTextMethods.generateOrderPaidBody = function(order){
   return 'Hi, ' + processDisplayName(order) + ' we have received your payment of $' + order.totalPrice + ' for order ' + order.order_ref + '.\n\n' + plainTextMethods.processOrderPayment(order) + plainTextMethods.emailFooter();
 }
 
+plainTextMethods.compileCustomContent = function(content){
+  return plainTextMethods.emailHeader + content + plainTextMethods.emailFooter();
+}
+
 plainTextMethods.compileOrderPaidContent = function(order){
   return plainTextMethods.emailHeader + plainTextMethods.generateOrderPaidBody(order);
 }

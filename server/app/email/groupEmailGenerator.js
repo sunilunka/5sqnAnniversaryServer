@@ -1,28 +1,25 @@
 'use strict';
 
+var path = require('path');
 var mailHelper = require('sendgrid').mail;
 
-var templateMethods = require('./templating_methods');
+var htmlTempalateMethods = require('./templating_methods');
 
 var plainTextMethods = require('./plainText_templating');
 
-var newAttendeeEmailGenerator = function(sendGrid, userData){
-
-  var displayName = function(first, last){
-    return first + " " + last;
-  }
+var generateGroupEmail = function(sendGrid, emailData){
 
   var message = new mailHelper.Mail();
 
-  message.setFrom(new mailHelper.Email('registration@5sqnrnzaf.firebaseapp.com'));
+  message.setFrom(new mailHelper.Email('updates@5sqnrnzaf.firebaseapp.com'));
 
   var personalization = new mailHelper.Personalization();
 
-  var to_address = new mailHelper.Email(userData.email, displayName(userData.firstName, userData.lastName));
+  var to_address = new mailHelper.Email(emailData.user.email, emailData.user.recipientName);
   // var cc_address = new mailHelper.Email('test@test.com')
   personalization.addTo(to_address);
   // personalization.addCc(cc_address);
-  personalization.setSubject('You are now registered for the 5 Squadron Anniversary Events.');
+  personalization.setSubject(emailData.subject);
 
   message.addPersonalization(personalization);
 
@@ -33,9 +30,9 @@ var newAttendeeEmailGenerator = function(sendGrid, userData){
 
   message.addMailSettings(messageSettings);
 
-  var plainMessageContent = new mailHelper.Content('text/plain', plainTextMethods.compileNewRegister(userData))
+  var plainMessageContent = new mailHelper.Content('text/plain', plainTextMethods.compileCustomContent(emailData.body));
 
-  var messageContent = new mailHelper.Content('text/html', templateMethods.compileNewRegister(userData));
+  var messageContent = new mailHelper.Content('text/html', compileCustomHtml(emailData.body));
 
   message.addContent(plainMessageContent);
   message.addContent(messageContent);
@@ -51,14 +48,10 @@ var newAttendeeEmailGenerator = function(sendGrid, userData){
     return response.statusCode;
   })
   .catch(function(err){
-    console.log("ERROR: ", err);
     return err;
   })
-
-
 
 }
 
 
-
-module.exports = newAttendeeEmailGenerator
+module.exports = generateGroupEmail

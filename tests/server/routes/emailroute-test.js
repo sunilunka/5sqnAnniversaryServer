@@ -34,7 +34,7 @@ describe('Emails Route', function () {
   });
 
   describe('POST /group route', function(){
-    it('should return a 200 response when the email is successful')
+    it('should return a 200 response when all emails have been sent successfully')
   })
 
   describe('POST /register-success route', function(){

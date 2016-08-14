@@ -9,7 +9,7 @@ var mailer = require(path.join(__dirname, '../email'));
 
 
 router.post('/group', function(req, res, next){
-
+  
 })
 
 router.post('/register-success', function(req, res, next){
