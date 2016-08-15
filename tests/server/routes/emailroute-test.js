@@ -34,10 +34,22 @@ describe('Emails Route', function () {
   });
 
   describe('POST /group route', function(){
-    it('should return a 200 response when all emails have been sent successfully')
+
+    it('should return a 200 response when all emails have been sent successfully', function(done){
+      guestAgent.post('/api/emails/group')
+      .send({
+        distributionList: 'attendees/' + testId
+      })
+      .expect(200)
+      .end(function(err, res){
+        if(err) return done(err);
+        done();
+      })
+    })
   })
 
   describe('POST /register-success route', function(){
+
     it('should return a 200 (202 in production) response when email has been sent successfully', function(done){
 
       guestAgent.post('/api/emails/register-success')
