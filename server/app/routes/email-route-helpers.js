@@ -8,9 +8,17 @@ var routeHelpers = {};
 routeHelpers.getAddresseeInformation = function(dbPath, next){
   return fireMethods.dbConnect(dbPath).once('value')
   .then(function(snapshot){
-    var data = snapshot.val();
-    console.log("DATA: ", data);
-    if(data) return data;
+    var distributionGroup = snapshot.val();
+    return fireMethods.dbConnect('attendees')
+    .once('value')
+    .then(function(attendeeSnap){
+      var attendees = attendeeSnap.val();
+      var toReturn = {};
+      for(var user in distributionGroup){
+        toReturn[user] = attendees[user];
+      }
+      return toReturn;
+    })
   })
   .catch(next);
 }

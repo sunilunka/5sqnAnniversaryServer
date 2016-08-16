@@ -104,6 +104,10 @@ templateMethods.emailDispatchedBody = function(order){
   return '<p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">The tracking number for the delivery is <strong>' + order.trackingData + '</strong>.</p><p style="background-color: #EFEFEF; color: #808080; padding:5px; margin: 0px; font-family: sans-serif">You can also view the tracking number by logging into the <a href="https://5sqnrnzaf.firebaseapp.com">anniversary website</a> and viewing the order in your profile.</p>'
 }
 
+templateMethods.compileCustomHeader = function(user){
+  return '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + user.firstName + ',</h3>'
+}
+
 templateMethods.compileCustomBody = function(content){
   var parsedContent = content.split('\n');
   var toReturn = parsedContent.map(function(str){

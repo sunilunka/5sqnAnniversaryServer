@@ -52,6 +52,24 @@ describe('Emails Route', function () {
         done();
       })
     })
+
+    it('should return a 200 response when all emails have been sent successfully when given an eventGuests db URL (will take a while, timeout is set at 15secs)', function(done){
+
+      this.timeout(15000);
+
+      guestAgent.post('/api/emails/group')
+      .send({
+        distributionList: 'eventGuests/-KChaDUmJ7V0Q_LrRrYl',
+        subject: 'Testing',
+        body: "We are testing some things here. \n Namely newlines and the like. \n\n To see if they present properly. \n\t If not, no matter."
+
+      })
+      .expect(200)
+      .end(function(err, res){
+        if(err) return done(err);
+        done();
+      })
+    })
   })
 
   describe('POST /register-success route', function(){

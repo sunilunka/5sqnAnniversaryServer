@@ -8,7 +8,7 @@ var htmlTemplateMethods = require('./templating_methods');
 var plainTextMethods = require('./plainText_templating');
 
 var compileCustomHtml = function(content, user){
-  return htmlTemplateMethods.emailHtmlHeader('5 SQN Anniversary Update') + htmlTemplateMethods.emailHeader + 'Hi ' + user.firstName + ', ' + htmlTemplateMethods.compileCustomBody(content) + htmlTemplateMethods.htmlEmailFooter() + '</body></html>';
+  return htmlTemplateMethods.emailHtmlHeader('5 SQN Anniversary Update') + htmlTemplateMethods.emailHeader + htmlTemplateMethods.compileCustomHeader(user) + htmlTemplateMethods.compileCustomBody(content) + htmlTemplateMethods.htmlEmailFooter() + '</body></html>';
 }
 
 var generateGroupEmail = function(sendGrid, emailData, userData){
@@ -38,7 +38,7 @@ var generateGroupEmail = function(sendGrid, emailData, userData){
 
   message.addContent(plainMessageContent);
   message.addContent(messageContent);
-  console.log("MESSAGE CONTENT: ", messageContent);
+
   var request = sendGrid.emptyRequest({
     method: 'POST',
     path: '/v3/mail/send',
@@ -47,8 +47,6 @@ var generateGroupEmail = function(sendGrid, emailData, userData){
 
   return sendGrid.API(request)
   .then(function(response){
-    console.log("RESPONSE: ", response.statusCode);
-    console.log("RESPONSE: ", response.body);
     return response.statusCode;
   })
   .catch(function(err){

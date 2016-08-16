@@ -11,7 +11,7 @@ var routeHelpers = require('./email-route-helpers');
 
 router.post('/group', function(req, res, next){
   if(typeof req.body.distributionList === 'string'){
-    routeHelpers.getAddresseeInformation(req.body.distributionList)
+    routeHelpers.getAddresseeInformation(req.body.distributionList, next)
     .then(function(data){
       var dispatchArray = routeHelpers.compileGroupUsers(data);
       return mailer.generateGroupEmail(dispatchArray, req.body);
