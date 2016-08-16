@@ -9,25 +9,23 @@ routeHelpers.getAddresseeInformation = function(dbPath, next){
   return fireMethods.dbConnect(dbPath).once('value')
   .then(function(snapshot){
     var data = snapshot.val();
+    console.log("DATA: ", data);
     if(data) return data;
   })
   .catch(next);
 }
 
-routeHelpers.dispatchGroup = function(addressees, emailObj){
+routeHelpers.dispatchGroup = function(addressee, emailObj){
 
 }
 
-routeHelpers.dispatchGroupEmail = function(addresseeObj, emailObj){
+routeHelpers.compileGroupUsers = function(addresseeObj, emailObj){
   var toDispatch = Object.keys(addresseeObj);
-  var groupNum = 0;
-
-  while(groupNum < 11){
-    // toDispatch.
-  }
-
-
-
+  return toDispatch.map(function(userId){
+    var userDetails = addresseeObj[userId];
+    userDetails.uid = userId;
+    return userDetails;
+  })
 }
 
 module.exports = routeHelpers;

@@ -3,11 +3,15 @@
 var path = require('path');
 var mailHelper = require('sendgrid').mail;
 
-var htmlTempalateMethods = require('./templating_methods');
+var htmlTemplateMethods = require('./templating_methods');
 
 var plainTextMethods = require('./plainText_templating');
 
-var generateGroupEmail = function(sendGrid, emailData){
+var compileCustomHtml = function(content, user){
+  return htmlTemplateMethods.emailHtmlHeader('5 SQN Anniversary Update') + htmlTemplateMethods.emailHeader + 'Hi ' + user.firstName + ', ' + htmlTemplateMethods.compileCustomBody(content) + htmlTemplateMethods.htmlEmailFooter() + '</body></html>';
+}
+
+var generateGroupEmail = function(sendGrid, emailData, userData){
 
   var message = new mailHelper.Mail();
 
@@ -15,10 +19,8 @@ var generateGroupEmail = function(sendGrid, emailData){
 
   var personalization = new mailHelper.Personalization();
 
-  var to_address = new mailHelper.Email(emailData.user.email, emailData.user.recipientName);
-  // var cc_address = new mailHelper.Email('test@test.com')
+  var to_address = new mailHelper.Email(userData.email, userData.firstName);
   personalization.addTo(to_address);
-  // personalization.addCc(cc_address);
   personalization.setSubject(emailData.subject);
 
   message.addPersonalization(personalization);
@@ -30,13 +32,13 @@ var generateGroupEmail = function(sendGrid, emailData){
 
   message.addMailSettings(messageSettings);
 
-  var plainMessageContent = new mailHelper.Content('text/plain', plainTextMethods.compileCustomContent(emailData.body));
+  var plainMessageContent = new mailHelper.Content('text/plain', plainTextMethods.compileCustomContent(emailData.body, userData));
 
-  var messageContent = new mailHelper.Content('text/html', compileCustomHtml(emailData.body));
+  var messageContent = new mailHelper.Content('text/html', compileCustomHtml(emailData.body, userData));
 
   message.addContent(plainMessageContent);
   message.addContent(messageContent);
-
+  console.log("MESSAGE CONTENT: ", messageContent);
   var request = sendGrid.emptyRequest({
     method: 'POST',
     path: '/v3/mail/send',
@@ -45,6 +47,8 @@ var generateGroupEmail = function(sendGrid, emailData){
 
   return sendGrid.API(request)
   .then(function(response){
+    console.log("RESPONSE: ", response.statusCode);
+    console.log("RESPONSE: ", response.body);
     return response.statusCode;
   })
   .catch(function(err){

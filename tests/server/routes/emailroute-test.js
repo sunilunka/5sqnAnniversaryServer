@@ -35,10 +35,16 @@ describe('Emails Route', function () {
 
   describe('POST /group route', function(){
 
-    it('should return a 200 response when all emails have been sent successfully', function(done){
+    it('should return a 200 response when all emails have been sent successfully (will take a while, timeout is set at 15secs)', function(done){
+
+      this.timeout(15000);
+
       guestAgent.post('/api/emails/group')
       .send({
-        distributionList: 'attendees/' + testId
+        distributionList: 'attendees',
+        subject: 'Testing',
+        body: "We are testing some things here. \n Namely newlines and the like. \n\n To see if they present properly. \n\t If not, no matter."
+
       })
       .expect(200)
       .end(function(err, res){

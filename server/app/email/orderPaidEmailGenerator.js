@@ -18,9 +18,9 @@ var emailGenerator = function(sendGrid, order){
   var personalization = new mailHelper.Personalization();
 
   var to_address = new mailHelper.Email(order.email, templateMethods.getFirstName(order));
-  // var cc_address = new mailHelper.Email('test@test.com')
+  var cc_address = new mailHelper.Email('5sqnanniversary@nzdf.mil.nz');
   personalization.addTo(to_address);
-  // personalization.addCc(cc_address);
+  personalization.addCc(cc_address);
   personalization.setSubject('Your payment for 5SQN order ' + order.order_ref +' has been received.');
 
   message.addPersonalization(personalization);

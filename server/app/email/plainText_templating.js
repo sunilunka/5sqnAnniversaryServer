@@ -4,6 +4,8 @@ var path = require('path');
 
 var plainTextMethods = {};
 
+plainTextMethods.accountDetails = 'RNZAF Auckland Base Welfare Fund No.2, 03-0251-0021252-09';
+
 plainTextMethods.processOrderPayment = function(order){
   if(order.deliveryMethod === 'Post/Courier'){
     return 'Now we have received the payment your order will be shipped shortly.';
@@ -71,7 +73,7 @@ plainTextMethods.emailOrderTable = function(orderObj){
 }
 
 plainTextMethods.emailOrderInstructions = function(orderObj){
-  return 'Please deposit the order amount into account: 12-3085-XXXXXXX-XX\n\nUse ' + orderObj.order_ref + ' as the reference in your payment.'
+  return 'Please deposit the order amount into account: ' + plainTextMethods.accountDetails + '\n\nUse ' + orderObj.order_ref + ' as the reference in your payment.'
 }
 
 plainTextMethods.compileOrder = function(orderObj){
@@ -95,11 +97,11 @@ plainTextMethods.registerFooter = function(){
 }
 
 plainTextMethods.emailFooter = function(){
-  return 'Please do not reply to this email. If you need to make an enquiry please send correspondence to xxxx@nzdf.mil.nz\n'
+  return 'Please do not reply to this email. If you need to make an enquiry please send correspondence to 5sqnanniversary@nzdf.mil.nz\n'
 }
 
 plainTextMethods.compileNewRegister = function(userData){
-  return (plainTextMethods.emailHeader + plainTextMethods.registerIntro(userData) + plainTextMethods.registerBody() + plainTextMethods.registerBilling('12-3085-XXXXXX-XXX')) + plainTextMethods.registerFooter();
+  return (plainTextMethods.emailHeader + plainTextMethods.registerIntro(userData) + plainTextMethods.registerBody(plainTextMethods.accountDetails) + plainTextMethods.registerBilling('RNZAF Auckland Base Welfare Fund No.2, 03-0251-0021252-09')) + plainTextMethods.registerFooter();
 }
 
 plainTextMethods.generateDispatchHeader = function(order){
@@ -114,8 +116,8 @@ plainTextMethods.generateOrderPaidBody = function(order){
   return 'Hi, ' + processDisplayName(order) + ' we have received your payment of $' + order.totalPrice + ' for order ' + order.order_ref + '.\n\n' + plainTextMethods.processOrderPayment(order) + plainTextMethods.emailFooter();
 }
 
-plainTextMethods.compileCustomContent = function(content){
-  return plainTextMethods.emailHeader + content + plainTextMethods.emailFooter();
+plainTextMethods.compileCustomContent = function(content, user){
+  return plainTextMethods.emailHeader + 'Hi ' + user.firstName + ', ' + content + plainTextMethods.emailFooter();
 }
 
 plainTextMethods.compileOrderPaidContent = function(order){

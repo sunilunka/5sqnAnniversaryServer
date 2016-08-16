@@ -26,7 +26,11 @@ mailer.generateOrderPaymentConfirmation = function(order){
 }
 
 mailer.generateGroupEmail = function(users, content){
+  var toResolve = users.map(function(user){
+    return require('./groupEmailGenerator')(sg, content, user);
+  })
 
+  return Promise.all(toResolve);
 }
 
 mailer.generateIndividualEmail = function(users, content){

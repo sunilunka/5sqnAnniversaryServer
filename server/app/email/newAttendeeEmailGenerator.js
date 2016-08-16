@@ -19,9 +19,9 @@ var newAttendeeEmailGenerator = function(sendGrid, userData){
   var personalization = new mailHelper.Personalization();
 
   var to_address = new mailHelper.Email(userData.email, displayName(userData.firstName, userData.lastName));
-  // var cc_address = new mailHelper.Email('test@test.com')
+  var cc_address = new mailHelper.Email('5sqnanniversary@nzdf.mil.nz')
   personalization.addTo(to_address);
-  // personalization.addCc(cc_address);
+  personalization.addCc(cc_address);
   personalization.setSubject('You are now registered for the 5 Squadron Anniversary Events.');
 
   message.addPersonalization(personalization);

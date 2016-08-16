@@ -13,7 +13,16 @@ router.post('/group', function(req, res, next){
   if(typeof req.body.distributionList === 'string'){
     routeHelpers.getAddresseeInformation(req.body.distributionList)
     .then(function(data){
-      console.log("DATA: ", data);
+      var dispatchArray = routeHelpers.compileGroupUsers(data);
+      return mailer.generateGroupEmail(dispatchArray, req.body);
+    })
+    .then(function(data){
+      console.log("RESOLVED DATA: ", data);
+      res.sendStatus(200);
+    })
+    .catch(function(err){
+      console.log("ERROR: ", err);
+      res.sendStatus(500);
     })
   }
 })

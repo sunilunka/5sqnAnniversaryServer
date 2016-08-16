@@ -73,7 +73,7 @@ templateMethods.emailOrderTable = function(orderObj){
 }
 
 templateMethods.emailOrderInstructions = function(orderObj){
-  return '<table style="width:98%"><tr><td style="background-color:#EFEFEF; color: #68AFC3; padding: 5px; margin-top: 5px; margin-bottom: 2px; font-family: sans-serif;">Please deposit the order amount into account: </td><td style="background-color:#EFEFEF; color: #68AFC3; padding: 5px; margin-top: 5px; margin-bottom: 2px; font-family: sans-serif;">12-3085-XXXXXXX-XX</td></tr><tr><td colspan="2" style="background-color:#EFEFEF; color: #68AFC3; padding: 5px; margin-top: 5px; margin-bottom: 2px; font-family: sans-serif;">Use ' + orderObj.order_ref + ' as the reference in your payment</td></tr></table>'
+  return '<table style="width:98%"><tr><td style="background-color:#EFEFEF; color: #68AFC3; padding: 5px; margin-top: 5px; margin-bottom: 2px; font-family: sans-serif;">Please deposit the order amount into account: </td><td style="background-color:#EFEFEF; color: #68AFC3; padding: 5px; margin-top: 5px; margin-bottom: 2px; font-family: sans-serif;">' + plainTextMethods.accountDetails + '</td></tr><tr><td colspan="2" style="background-color:#EFEFEF; color: #68AFC3; padding: 5px; margin-top: 5px; margin-bottom: 2px; font-family: sans-serif;">Use ' + orderObj.order_ref + ' as the reference in your payment</td></tr></table>'
 }
 
 templateMethods.compileOrder = function(orderObj){
@@ -97,11 +97,23 @@ templateMethods.registerFooter = function(){
 }
 
 templateMethods.compileNewRegister = function(userData){
-  return (templateMethods.emailHtmlHeader('You are now registered for the 5SQN Anniversary Events') + templateMethods.emailHeader + templateMethods.registerIntro(userData) + templateMethods.registerBody() + templateMethods.registerBilling('12-3085-XXXXXX-XXX')) + templateMethods.registerFooter() +  templateMethods.htmlEmailFooter() + '</body></html>';
+  return (templateMethods.emailHtmlHeader('You are now registered for the 5SQN Anniversary Events') + templateMethods.emailHeader + templateMethods.registerIntro(userData) + templateMethods.registerBody() + templateMethods.registerBilling(plainTextMethods.accountDetails)) + templateMethods.registerFooter() +  templateMethods.htmlEmailFooter() + '</body></html>';
 }
 
 templateMethods.emailDispatchedBody = function(order){
   return '<p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">The tracking number for the delivery is <strong>' + order.trackingData + '</strong>.</p><p style="background-color: #EFEFEF; color: #808080; padding:5px; margin: 0px; font-family: sans-serif">You can also view the tracking number by logging into the <a href="https://5sqnrnzaf.firebaseapp.com">anniversary website</a> and viewing the order in your profile.</p>'
+}
+
+templateMethods.compileCustomBody = function(content){
+  var parsedContent = content.split('\n');
+  var toReturn = parsedContent.map(function(str){
+    if(str.length){
+      return '<p style="background-color: #EFEFEF; color: #808080; padding:5px; margin: 0px; font-family: sans-serif">' + str + '</p>'
+    }
+  })
+
+  return toReturn.join('');
+
 }
 
 templateMethods.generateOrderPaidBody = function(order){
@@ -109,7 +121,7 @@ templateMethods.generateOrderPaidBody = function(order){
 }
 
 templateMethods.htmlEmailFooter = function(){
-  return '<p style="background-color: #808080; color: #EFEFEF; font-family: sans-serif; font-size: 10px; padding: 5px;">Please do not reply to this email. The 5SQN Store email server is notification only. If you have an enquiry, please send it to <a href="mailto:5sqntest@nzdf.mil.nz">the committee.</a>Thanks, we look forward to commemorating the anniversary with you.</p>'
+  return '<p style="background-color: #808080; color: #EFEFEF; font-family: sans-serif; font-size: 10px; padding: 5px;">Please do not reply to this email. The 5SQN Store email server is notification only. If you have an enquiry, please send it to <a href="mailto:5sqnanniversary@nzdf.mil.nz">the committee.</a>Thanks, we look forward to commemorating the anniversary with you.</p>'
 }
 
 
