@@ -1,5 +1,5 @@
 module.exports = {
-  "DATABASE_URI": process.env.MONGOLAB_URI,
+  "DATABASE_URI": process.env.MONGODB_URI,
   "ACAO": "*",
   "ACAM": "GET, POST, PUT, DELETE, OPTIONS",
   "ACAH": "Content-Type, Accept",
