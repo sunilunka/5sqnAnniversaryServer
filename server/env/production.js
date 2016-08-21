@@ -1,6 +1,6 @@
 module.exports = {
   "DATABASE_URI": process.env.MONGOLAB_URI,
-  "ACAO": "https://5sqnrnzaf.firebaseapp.com",
+  "ACAO": "*",
   "ACAM": "GET, POST, PUT, DELETE, OPTIONS",
   "ACAH": "Content-Type, Accept",
   "ACMA": 600
