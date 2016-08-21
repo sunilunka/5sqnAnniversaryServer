@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha ./tests",
-    "start": "nodemon --watch server ./server/main.js"
+    "start": "./server/main.js"
   },
   "author": "Sunil Unka",
   "license": "ISC",
