@@ -71,7 +71,7 @@ describe('Emails Route', function () {
       })
     })
 
-    it('should return a 200 response (202 in production) when all emails have been sent successfully when given an array of users', function(){
+    it('should return a 200 response (202 in production) when all emails have been sent successfully when given an array of users', function(done){
       var users = [{
           email: 'sunil.unka@gmail.com',
           firstName: 'Sunil',
@@ -94,9 +94,7 @@ describe('Emails Route', function () {
         if(err) done(err);
         done();
       })
-
     })
-
   })
 
   describe('POST /register-success route', function(){
@@ -113,11 +111,6 @@ describe('Emails Route', function () {
         done();
       })
     })
-  })
-
-  describe('POST /selected-users route', function(){
-
-    it('should return 200 when (202 in production) when email to a user has been sent successfully')
   })
 
   describe('POST /event-payment-success', function(){

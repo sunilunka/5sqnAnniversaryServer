@@ -10,6 +10,7 @@ var routeHelpers = require('./email-route-helpers');
 
 
 router.post('/group', function(req, res, next){
+  console.log("TYPE OF REQ DIST LIST: ", typeof req.body.distributionList);
   if(typeof req.body.distributionList === 'string'){
     routeHelpers.getAddresseeInformation(req.body.distributionList, next)
     .then(function(data){
@@ -24,10 +25,10 @@ router.post('/group', function(req, res, next){
       console.log("ERROR: ", err);
       res.sendStatus(500);
     })
-  } else if(typeof req.body.distributionList === 'array'){
+  } else if(Array.isArray(req.body.distributionList)){
     /* Array should hold all relevant user details so no call to firebase is necessary */
     console.log("DIST LIST IS ARRAY: ", req.body.distributionList);
-    return mailer.generateGroupEmail(req.body.distributionList. req.body)
+    return mailer.generateGroupEmail(req.body.distributionList, req.body)
     .then(function(data){
       res.sendStatus(200);
     })
@@ -35,7 +36,6 @@ router.post('/group', function(req, res, next){
       console.log("ERROR: ", err);
       res.sendStatus(500);
     })
-
   }
 })
 
