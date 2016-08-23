@@ -70,6 +70,33 @@ describe('Emails Route', function () {
         done();
       })
     })
+
+    it('should return a 200 response (202 in production) when all emails have been sent successfully when given an array of users', function(){
+      var users = [{
+          email: 'sunil.unka@gmail.com',
+          firstName: 'Sunil',
+          lastName: 'Unka',
+        },
+        {
+          email: 'seawolf007@virginbroadband.com.au',
+          firstName: 'Calvin',
+          lastName: 'Hobbes'
+        }];
+
+      guestAgent.post('/api/emails/group')
+      .send({
+        distributionList: users,
+        subject: 'Testing',
+        body: "We are testing some things here. \n Namely newlines and the like. \n\n To see if they present properly. \n\t If not, no matter."
+      })
+      .expect(200)
+      .end(function(err, res){
+        if(err) done(err);
+        done();
+      })
+
+    })
+
   })
 
   describe('POST /register-success route', function(){
@@ -86,6 +113,15 @@ describe('Emails Route', function () {
         done();
       })
     })
+  })
+
+  describe('POST /selected-users route', function(){
+
+    it('should return 200 when (202 in production) when email to a user has been sent successfully')
+  })
+
+  describe('POST /event-payment-success', function(){
+
   })
 
 })

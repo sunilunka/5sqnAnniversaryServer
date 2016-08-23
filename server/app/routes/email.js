@@ -24,7 +24,30 @@ router.post('/group', function(req, res, next){
       console.log("ERROR: ", err);
       res.sendStatus(500);
     })
+  } else if(typeof req.body.distributionList === 'array'){
+    /* Array should hold all relevant user details so no call to firebase is necessary */
+    console.log("DIST LIST IS ARRAY: ", req.body.distributionList);
+    return mailer.generateGroupEmail(req.body.distributionList. req.body)
+    .then(function(data){
+      res.sendStatus(200);
+    })
+    .catch(function(err){
+      console.log("ERROR: ", err);
+      res.sendStatus(500);
+    })
+
   }
+})
+
+router.post('/event-payment-success', function(req, res, next){
+
+})
+
+router.post('/selected-users', function(req, res, next){
+  fireMethods.getOneAttendeeRef(req.body.userId)
+  .then(function(user){
+
+  })
 })
 
 router.post('/register-success', function(req, res, next){
