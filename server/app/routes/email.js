@@ -27,9 +27,9 @@ router.post('/group', function(req, res, next){
     })
   } else if(Array.isArray(req.body.distributionList)){
     /* Array should hold all relevant user details so no call to firebase is necessary */
-    console.log("DIST LIST IS ARRAY: ", req.body.distributionList);
     return mailer.generateGroupEmail(req.body.distributionList, req.body)
     .then(function(data){
+      console.log("DATA: ", data);
       res.sendStatus(200);
     })
     .catch(function(err){
