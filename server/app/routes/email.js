@@ -10,7 +10,6 @@ var routeHelpers = require('./email-route-helpers');
 
 
 router.post('/group', function(req, res, next){
-  console.log("TYPE OF REQ DIST LIST: ", typeof req.body.distributionList);
   if(typeof req.body.distributionList === 'string'){
     routeHelpers.getAddresseeInformation(req.body.distributionList, next)
     .then(function(data){
