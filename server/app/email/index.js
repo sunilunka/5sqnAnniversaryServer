@@ -25,6 +25,10 @@ mailer.generateOrderPaymentConfirmation = function(order){
   return require('./orderPaidEmailGenerator')(sg, order);
 }
 
+mailer.generateEventPaymentConfirmation = function(user, evt){
+  return require('./eventPaymentEmail')(sg, user, evt);
+}
+
 mailer.generateGroupEmail = function(users, content){
   var toResolve = users.map(function(user){
     return require('./groupEmailGenerator')(sg, content, user);

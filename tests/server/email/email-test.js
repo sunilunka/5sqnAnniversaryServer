@@ -3,6 +3,8 @@
 var path = require('path');
 var mailer = require(path.join(__dirname, '../../../server/app/email'));
 
+var plainTextMethods = require(path.join(__dirname, '../../../server/app/email/plainText_templating'))
+
 var mongoose = require('mongoose');
 
 var chai = require('chai');
@@ -22,6 +24,15 @@ var clearDB = require('mocha-mongoose')(dbURI);
 var supertest = require('supertest');
 var app = require('../../../server/app');
 
+
+describe('Plain Text Templating Methods', function(){
+
+  describe('#parseTimes()', function(){
+    it('should return a time value with single character strings prepended by zero', function(){
+      expect(plainTextMethods.parseTimes(['1', '0'])).to.equal('0100');
+    });
+  })
+})
 
 describe('Order email functionality', function(){
   describe('#generateOrderSuccessEmail', function(){

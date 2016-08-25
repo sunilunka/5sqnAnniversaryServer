@@ -48,6 +48,16 @@ var processDisplayName = function(orderObj){
   }
 }
 
+plainTextMethods.parseTimes = function(timeArray){
+  return timeArray.map(function(numString){
+    if(numString.length === 1){
+      return "0" + numString;
+    } else {
+      return numString;
+    }
+  }).join('');
+}
+
 plainTextMethods.emailHeader = '5 Squadron - Celebrating 75 Years serving New Zealand \n\n'
 
 plainTextMethods.emailOrderIntroHeader = function(orderObj){
@@ -126,6 +136,10 @@ plainTextMethods.compileOrderPaidContent = function(order){
 
 plainTextMethods.compileDispatchContent = function(order){
   return plainTextMethods.emailHeader + plainTextMethods.generateDispatchHeader(order) + plainTextMethods.generateDispatchBody(order) + plainTextMethods.emailFooter();
+}
+
+plainTextMethods.compileEventPaymentBody = function(evt, user){
+  return plainTextMethods.emailHeader + 'Hi, ' + user.firstName + ',\n\nYour payment for ' + evt.name + ' has been received.\n\nWe look forward to welcoming you to the ' + evt.location + ' on the ' + evt.date + ' from ' + plainTextMethods.parseTimes([evt.startTime.hours, evt.startTime.minutes]) + '\n\nIt promises to be a fantastic event celebrating our unique history with generations of squadron mates, friends and family.\n\n' + plainTextMethods.emailFooter();
 }
 
 module.exports = plainTextMethods;

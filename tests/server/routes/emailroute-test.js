@@ -115,6 +115,31 @@ describe('Emails Route', function () {
 
   describe('POST /event-payment-success', function(){
 
+    it('should return status 200 (202 in production) response when email sent successfully', function(done){
+      guestAgent.post('/api/emails/event-payment-success')
+      .send({
+        user: {
+          email: 'sunil.unka@virginmedia.com',
+          firstName: 'Sunil',
+          lastName: 'Unka'
+        },
+        evt: {
+          name: 'Black Tie Dinner',
+          location: 'MOTAT',
+          startTime: {
+            hours: '18',
+            minutes: '0'
+          },
+          date: 'Saturday 24 September 2016'
+        }
+      })
+      .expect(200)
+      .end(function(err, res){
+        if(err) return done(err);
+        done();
+      })
+    })
+
   })
 
 })

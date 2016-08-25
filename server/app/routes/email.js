@@ -40,15 +40,15 @@ router.post('/group', function(req, res, next){
 })
 
 router.post('/event-payment-success', function(req, res, next){
-
+ return mailer.generateEventPaymentConfirmation(req.body.user, req.body.evt)
+ .then(function(data){
+   res.sendStatus(200)
+ })
+ .catch(function(err){
+   res.sendStatus(500);
+ })
 })
 
-router.post('/selected-users', function(req, res, next){
-  fireMethods.getOneAttendeeRef(req.body.userId)
-  .then(function(user){
-
-  })
-})
 
 router.post('/register-success', function(req, res, next){
   fireMethods.getOneAttendeeRef(req.body.userId)

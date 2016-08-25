@@ -124,6 +124,10 @@ templateMethods.generateOrderPaidBody = function(order){
   return '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi, ' + templateMethods.getFirstName(order) + ' we have received your payment of <span style="color: #808080"><strong>$' + order.totalPrice + '</strong></span> for order <strong>' + order.order_ref + '</strong>.</h3><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">'  + plainTextMethods.processOrderPayment(order) + '</p>';
 }
 
+templateMethods.compileEventPaymentBody = function(evt, user){
+  return templateMethods.emailHtmlHeader('5 SQN Anniversary ' + evt.name) + templateMethods.emailHeader + '<h3 style="color: #68AFC3; padding: 5px; font-family: sans-serif;">Hi ' + user.firstName + ',</h3><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">Your payment for <strong>' + evt.name + '</strong> has been received.</p><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">We look forward to welcoming you to the <strong>' + evt.location + '</strong> on the <strong>' + evt.date + '</strong> from <strong>' + plainTextMethods.parseTimes([evt.startTime.hours, evt.startTime.minutes]) + '</strong></p><p style="background-color: #EFEFEF; color: #808080; padding: 5px; margin: 0px; font-family: sans-serif">It promises to be a fantastic event celebrating our unique history with generations of squadron mates, friends and family.</p>' + templateMethods.htmlEmailFooter() + '</body></html>'
+}
+
 templateMethods.htmlEmailFooter = function(){
   return '<p style="background-color: #808080; color: #EFEFEF; font-family: sans-serif; font-size: 10px; padding: 5px;">Please do not reply to this email. The 5SQN Store email server is notification only. If you have an enquiry, please send it to <a href="mailto:5sqnanniversary@nzdf.mil.nz">the committee.</a>Thanks, we look forward to commemorating the anniversary with you.</p>'
 }
