@@ -17,18 +17,15 @@ router.post('/group', function(req, res, next){
       return mailer.generateGroupEmail(dispatchArray, req.body);
     })
     .then(function(data){
-      console.log("RESOLVED DATA: ", data);
       res.sendStatus(200);
     })
     .catch(function(err){
-      console.log("ERROR: ", err);
       res.sendStatus(500);
     })
   } else if(Array.isArray(req.body.distributionList)){
     /* Array should hold all relevant user details so no call to firebase is necessary */
     return mailer.generateGroupEmail(req.body.distributionList, req.body)
     .then(function(data){
-      console.log("DATA: ", data);
       res.sendStatus(200);
     })
     .catch(function(err){
