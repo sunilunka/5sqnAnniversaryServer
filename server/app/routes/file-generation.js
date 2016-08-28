@@ -15,7 +15,9 @@ router.get('/guest-list/:eventId', function(req, res, next){
     res.render('guestlist.njk', {
       guestlist: guestListArray
     }, function(err, html){
-      fs.outputFile('/tmp/guestlist.html', html, function(err){
+      var fileLocation = path.join(__dirname, '../file-generation/tmp/guestlist.html');
+      console.log("FILE LOCATION: ", fileLocation);
+      fs.outputFile(fileLocation, html, function(err){
         console.log("ERROR: ", err)
       })
       res.send(html);
