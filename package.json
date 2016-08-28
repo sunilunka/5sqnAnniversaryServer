@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha ./tests",
-    "start": "nodemon --watch server -e js,json,html ./server/main.js"
+    "start": "nodemon ./server/main.js"
   },
   "author": "Sunil Unka",
   "license": "ISC",
@@ -19,10 +19,12 @@
     "express": "^4.14.0",
     "firebase": "^3.1.0",
     "fs-extra": "^0.30.0",
+    "html-pdf": "^2.1.0",
     "lodash": "^4.13.1",
     "mongoose": "^4.5.3",
     "nodemon": "^1.10.2",
     "nunjucks": "^2.4.2",
+    "phantom": "^2.1.20",
     "phantomjs": "^2.1.7",
     "sendgrid": "^4.0.1"
   },
