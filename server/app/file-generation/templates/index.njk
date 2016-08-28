@@ -5,9 +5,35 @@
     <title>5 Squadron - Royal New Zealand Air Force</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-  <body>
-    <h1>Testing!</h1>
-    <h2>Why in the hell isn't this working?</h2>
+  <style>
+    .print-font {
+      font-family: helvetica, arial;
+    }
+
+    .print-heading {
+      padding: 5px;
+      background-color: black;
+      color: white;
+    }
+
+    .print-guest-entry {
+      padding: 1px 2px 1px 2px;
+      border: 1px solid grey;
+      margin: 1.5px 0px 1.5px 0px;
+      font-size: 0.75em;
+    }
+
+    .print-guest-attendee {
+      font-weight: 600;
+    }
+
+    .print-guest-stats {
+      display:inline-block;
+    }
+
+  </style>
+  <body class="print-font">
+    <h4 class="print-heading">Event Guest List</h4>
     <section>
     {% block content %}
     {% endblock %}

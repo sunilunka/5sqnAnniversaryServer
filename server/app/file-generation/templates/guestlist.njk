@@ -1,11 +1,19 @@
 {% extends './index.njk' %}
 {% block content %}
   {% for list in guestlist %}
-    <h3>{{ list.registeredAttendee }}</h3>
-    <ul>
-    {% for guest in list.guests %}
-      <li>{{ guest }}</li>
-    {% endfor %}
-    </ul>
+  <div class="print-guest-entry">
+    <div>
+      <p class="print-guest-attendee">{{ list.registeredAttendee | title }}</p>
+      {% for guest in list.guests %}
+        <p>{{ guest | title }}</p>
+      {% endfor %}
+    </div>
+    <div class="print-guest-stats">
+      <p>{{ list.totalGuests }}</p>
+      {% if list.paid %}
+        <p>PAID</p>
+      {% endif %}
+    </div>
+  </div>
   {% endfor %}
 {% endblock %}

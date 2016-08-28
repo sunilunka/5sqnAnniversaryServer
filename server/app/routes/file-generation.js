@@ -7,7 +7,6 @@ var router = express.Router();
 var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var fileGenMethods = require(path.join(__dirname, '../file-generation'));
 var fs = require('fs-extra');
-var pdfGen = require('html-pdf');
 var phantom = require('phantom');
 
 router.get('/guest-list/:eventId', function(req, res, next){
@@ -17,7 +16,7 @@ router.get('/guest-list/:eventId', function(req, res, next){
     res.render('guestlist.njk', {
       guestlist: guestListArray
     }, function(err, html){
-      var fileLocation = path.join(__dirname, '../../downloads/guestlist.html');
+      var fileLocation = path.join(__dirname, '../../../downloads/guestlist.html');
       fs.outputFile(fileLocation, html, function(err){
         if(err) return next(err);
         var instance;
@@ -28,6 +27,11 @@ router.get('/guest-list/:eventId', function(req, res, next){
           return phInstance.createPage()
         })
         .then(function(page){
+          page.property('paperSize', {
+            format: 'A4',
+            orientation: 'portrait',
+            margin: '2.54cm',
+          })
           pageToPrint = page;
           return page.open(fileLocation);
         })
@@ -35,15 +39,18 @@ router.get('/guest-list/:eventId', function(req, res, next){
           console.log("STATUS: ", status)
           var savedDate = Date.now();
           var fileName = savedDate + '-guestlist.pdf'
-          var renderPath = path.join(__dirname, '../../../downloads/' + savedDate);
+          var renderPath = path.join(__dirname, '../../../downloads/' + savedDate + '-guestlist.pdf');
+
           pageToPrint.render(renderPath);
-          res.status(200).json({ assetPath: '/downloads/' });
+          res.status(200).json({ assetPath: 'http://127.0.0.1:3000/downloads/' + fileName });
+
           return renderPath;
         })
         .then(function(){
 
         })
         .catch(function(err){
+          console.log('ERROR FOUND: ', err);
           phInstance.exit();
         })
       })

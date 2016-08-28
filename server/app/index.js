@@ -9,7 +9,11 @@ module.exports = app;
 /* Applies all configuration objects to the application including middleware (body-parser etc.)*/
 require('./configure')(app);
 
+app.use('/downloads', express.static(path.join(__dirname, '../../downloads')));
+
 app.use('/api', require('./routes'));
+
+
 /*
  This middleware will catch any URLs resembling a file extension
  for example: .js, .html, .css
@@ -17,15 +21,17 @@ app.use('/api', require('./routes'));
  URLs that bypass express.static because the given file does not exist.
  */
 app.use(function (req, res, next) {
-    if (path.extname(req.path).length > 0) {
-        res.status(404).end();
-    } else {
-        next(null);
-    }
-
+  console.log("ASSET ASKED FOR: ", req.path);
+  if (path.extname(req.path).length > 0) {
+    res.status(404).end();
+  } else {
+    next(null);
+  }
 });
 
+
 app.get('/*', function (req, res) {
+  console.log("ASSET ASKED FOR: ")
   res.sendStatus(404);
 });
 
