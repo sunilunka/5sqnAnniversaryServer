@@ -1,5 +1,3 @@
 node_modules
 /server/app/configure/authentication
-/server/app/file-generation/tmp
-
-
+/server/downloads
