@@ -35,7 +35,7 @@ router.get('/guest-list/:eventId', function(req, res, next){
           console.log("STATUS: ", status)
           var savedDate = Date.now();
           var fileName = savedDate + '-guestlist.pdf'
-          var renderPath = path.join(__dirname, '../../../downloads/' + );
+          var renderPath = path.join(__dirname, '../../../downloads/' + savedDate);
           pageToPrint.render(renderPath);
           res.status(200).json({ assetPath: '/downloads/' });
           return renderPath;
