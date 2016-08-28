@@ -36,9 +36,6 @@ var emailGenerator = function(sendGrid, user, evt){
   message.addContent(plainMessageContent);
   message.addContent(messageContent);
 
-  console.log("HTML MESSAGE CONTENT: ", messageContent);
-  console.log("PLAIN TEXT MESSAGE: ", plainMessageContent);
-
   var request = sendGrid.emptyRequest({
     method: 'POST',
     path: '/v3/mail/send',

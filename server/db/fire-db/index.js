@@ -2,6 +2,92 @@
 
 const firebase = require('firebase');
 
+var attendeeGuestObj = function(dbObj){
+
+  var self = this;
+
+  this.attendeeObj = dbObj;
+
+  this.generateGuestArray = function(){
+    var guestArray = [];
+    for(var field in self.attendeeObj){
+      if((field !== 'registeredAttendee')){
+        guestArray.push(self.attendeeObj[field]);
+      }
+    }
+    self.guests = guestArray;
+    return self;
+  }
+
+  this.setRegisteredAttendee = function(){
+    self.registeredAttendee = self.attendeeObj.registeredAttendee;
+    return self;
+  }
+
+  this.setUserId = function(userId){
+    self.uid = userId;
+    return self;
+  }
+
+  this.setAttendeePaid = function(eventId){
+    if(!self['uid']) return;
+    return firebaseRefs.attendeeEventPaymentState(self.uid, eventId)
+    .then(function(userPaid){
+      userPaid ? (self.paid = true) : (self.paid = false);
+      return self;
+    })
+  }
+
+  this.setTotalAttending = function(){
+    if(self.hasOwnProperty('guests')){
+      self.totalGuests = (1 + self.guests.length);
+      return self;
+    } else {
+      self.totalGuests = 1;
+      return self;
+    }
+  }
+}
+
+// attendeeGuestObj.prototype.generateGuestArray = function(){
+//   var guestArray = [];
+//   for(var field in this.attendeeObj){
+//     if((field !== 'registeredAttendee')){
+//       guestArray.push(this.attendeeObj[field]);
+//     }
+//   }
+//   this.guests = guestArray;
+//   return this;
+// }
+//
+// attendeeGuestObj.prototype.setregisteredAttendee = function(){
+//   this.registeredAttendee = this.attendeeObj.registeredAttendee;
+//   return this;
+// }
+//
+// attendeeGuestObj.prototype.setUserId = function(userId){
+//   this.uid = userId;
+//   return this;
+// }
+
+
+var guestListObjToArray = function(guestListObj, eventId){
+  var guestListArray = [];
+  for(var attendeeId in guestListObj){
+    var arrayObj = new attendeeGuestObj(guestListObj[attendeeId]);
+    guestListArray.push(arrayObj.generateGuestArray()
+    .setRegisteredAttendee()
+    .setUserId(attendeeId)
+    .setTotalAttending()
+    .setAttendeePaid(eventId)
+    .then(function(moddedObj){
+      return moddedObj;
+    }));
+
+  }
+  return Promise.all(guestListArray);
+}
+
 var firebaseRefs = {};
 
 firebaseRefs.dbConnect = function(route){
@@ -63,6 +149,25 @@ firebaseRefs.generateOrderRefNumber = function(){
   })
   .then(function(transactionObj){
     return transactionObj.snapshot.val();
+  })
+}
+
+firebaseRefs.getEventGuests = function(eventId){
+  return firebaseRefs.dbConnect('/eventGuests/' + eventId)
+  .once('value')
+  .then(function(snapshot){
+    return snapshot.val();
+  })
+  .then(function(guestListObj){
+    return guestListObjToArray(guestListObj, eventId);
+  })
+}
+
+firebaseRefs.attendeeEventPaymentState = function(userId, evtId){
+  return firebaseRefs.dbConnect('/attendees/' + userId + '/eventPayments/' + evtId)
+  .once('value')
+  .then(function(snapshot){
+    return snapshot.val() ? true : false;
   })
 }
 

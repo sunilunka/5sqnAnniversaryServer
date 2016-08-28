@@ -14,6 +14,8 @@ var sinon = require('sinon');
 var testId = 'I0cr7ykBtISiw4kO68sESRfTqTp1';
 var testIdNonManager = 'zj64GsClZ5YYGg4hFmhMZmG4b183';
 var fakeId = 'xh69GSClZ5XXGg4hFmhMZmH4b143';
+var testEventId = "-KChe4MrYH9m3YFozdf6";
+var paidUserId = 'xhcGAgGpReMUxMj5IRhobzW4B4E3';
 
 describe('Firebase dependent methods', function(){
   /* Interactions with firebase db commonly take longer than requests from local host, so increase timeout */
@@ -55,7 +57,7 @@ describe('Firebase dependent methods', function(){
 
 
   /* Only run these tests when not live, or else, allocate another field to the REAL numbers (good idea!) */
-  describe('#generateOrderRefNumber() TEST SHOULD ONLY BE RUN WHEN STORE NOT LIVE', function(){
+  xdescribe('#generateOrderRefNumber() TEST SHOULD ONLY BE RUN WHEN STORE NOT LIVE', function(){
 
     var originalValue;
 
@@ -79,6 +81,28 @@ describe('Firebase dependent methods', function(){
     it('should generate a new order number incremented by one', function(){
       expect(Firebase.generateOrderRefNumber()).to.eventually.equal(originalValue + 1);
     })
+  })
+
+  describe('#getEventGuests()', function(){
+    it('should return the event guest list in array form', function(done){
+      expect(Firebase.getEventGuests(testEventId)).to.eventually.be.a('array').notify(done);
+    })
+  })
+
+
+  describe('#attendeeEventPaymentState()', function(){
+    it('should return a boolean indicating if an attendee has paid for an event or not', function(done){
+      expect(Firebase.attendeeEventPaymentState(testId, testEventId)).to.eventually.be.a('boolean').notify(done);
+    })
+
+    it('should return true for an attendee who has paid', function(done){
+      expect(Firebase.attendeeEventPaymentState(paidUserId, testEventId)).to.eventually.be.ok.notify(done);
+    })
+
+    it('should return return false for an attendee who has not paid', function(done){
+      expect(Firebase.attendeeEventPaymentState(testId, testEventId)).to.eventually.not.be.ok.notify(done);
+    })
+
   })
 
 })

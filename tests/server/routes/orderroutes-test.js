@@ -29,7 +29,7 @@ var app = require('../../../server/app');
 var testId = 'I0cr7ykBtISiw4kO68sESRfTqTp1';
 var testIdNonManager = 'zj64GsClZ5YYGg4hFmhMZmG4b183';
 
-describe('Order routes', function(){
+xdescribe('Order routes', function(){
 
   beforeEach('Establish DB connection', function (done) {
     if (mongoose.connection.db) return done();

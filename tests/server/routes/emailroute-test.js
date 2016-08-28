@@ -25,7 +25,7 @@ var app = require('../../../server/app');
 var testId = 'I0cr7ykBtISiw4kO68sESRfTqTp1';
 
 
-describe('Emails Route', function () {
+xdescribe('Emails Route', function () {
 
   var guestAgent;
 

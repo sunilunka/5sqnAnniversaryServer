@@ -18,7 +18,7 @@ var expect = require('chai').expect;
 var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
 
-describe('Order route helper methods', function(){
+xdescribe('Order route helper methods', function(){
 
   var testOrder = testOrderData.test_order;
   testOrder.email = 'sunil.unka@gmail.com';
@@ -173,7 +173,7 @@ describe('Order route helper methods', function(){
 
     it('should be a function', function(){
       expect(orderRouteHelpers.emailOrderStateUpdate).to.be.a('function');
-    })  
+    })
   })
 
 })
