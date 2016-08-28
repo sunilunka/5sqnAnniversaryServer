@@ -1,0 +1,11 @@
+{% extends './index.njk' %}
+{% block content %}
+  {% for list in guestlist %}
+    <h3>{{ list.registeredAttendee }}</h3>
+    <ul>
+    {% for guest in list.guests %}
+      <li>{{ guest }}</li>
+    {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock %}

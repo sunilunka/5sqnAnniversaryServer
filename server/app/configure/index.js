@@ -12,4 +12,5 @@ module.exports = function(app){
   };
 
   require('./parsing-middleware')(app);
+  require('./engine-middleware')(app);
 }

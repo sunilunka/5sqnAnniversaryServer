@@ -13,6 +13,7 @@ router.use('/variants', require('./variant'));
 router.use('/orders', require('./order'));
 router.use('/users', require('./user'));
 router.use('/emails', require('./email'));
+router.use('/generated-files', require('./file-generation'));
 
 
 module.exports = router;
