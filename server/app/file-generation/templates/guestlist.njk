@@ -1,19 +1,24 @@
 {% extends './index.njk' %}
 {% block content %}
+  <p class="print-header-details">5 SQN Anniversary Event Guest List - Generated: <strong>{{ date }}</strong></p>
+  <h3 class="print-heading">Guest List: {{ evt.name }} | <span class="print-event-date"> {{ evt.date }}<span></h3>
   {% for list in guestlist %}
   <div class="print-guest-entry">
-    <div>
+    <div class="print-guest-section print-guest-names">
       <p class="print-guest-attendee">{{ list.registeredAttendee | title }}</p>
       {% for guest in list.guests %}
         <p>{{ guest | title }}</p>
       {% endfor %}
     </div>
-    <div class="print-guest-stats">
-      <p>{{ list.totalGuests }}</p>
+    <div class="print-guest-section print-guest-stats">
+      <p class="print-guest-total">Attending: <span>{{ list.totalGuests }}</span></p>
       {% if list.paid %}
-        <p>PAID</p>
+        <p class="print-guest-paid">PAID</p>
       {% endif %}
     </div>
+    {# <div class="print-guest-section print-guest-checkin">
+      <p>Checked In <span></span></p>
+    </div> #}
   </div>
   {% endfor %}
 {% endblock %}

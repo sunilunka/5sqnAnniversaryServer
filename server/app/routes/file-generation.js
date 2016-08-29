@@ -8,53 +8,58 @@ var fireMethods = require(path.join(__dirname, '../../db/fire-db'));
 var fileGenMethods = require(path.join(__dirname, '../file-generation'));
 var fs = require('fs-extra');
 var phantom = require('phantom');
+var moment = require('moment');
 
 router.get('/guest-list/:eventId', function(req, res, next){
-  console.log("REQ PARAMS: ", req.params);
-  fileGenMethods.generateEventGuestList(req.params.eventId)
-  .then(function(guestListArray){
-    res.render('guestlist.njk', {
-      guestlist: guestListArray
-    }, function(err, html){
-      var fileLocation = path.join(__dirname, '../../../downloads/guestlist.html');
-      fs.outputFile(fileLocation, html, function(err){
-        if(err) return next(err);
-        var instance;
-        var pageToPrint;
-        phantom.create()
-        .then(function(phInstance){
-          instance = phInstance;
-          return phInstance.createPage()
-        })
-        .then(function(page){
-          page.property('paperSize', {
-            format: 'A4',
-            orientation: 'portrait',
-            margin: '2.54cm',
+  fireMethods.getEventDetails(req.params.eventId)
+  .then(function(eventDetails){
+    fileGenMethods.generateEventGuestList(req.params.eventId)
+    .then(function(guestListArray){
+      guestListArray = guestListArray.sort(fileGenMethods.sortByRegisteredAttendee)
+      res.render('guestlist.njk', {
+        guestlist: guestListArray,
+        evt: eventDetails,
+        date: fileGenMethods.generateDtg()
+      }, function(err, html){
+        var fileLocation = path.join(__dirname, fileGenMethods.generateDefaultHTMLLocation('guestlist'));
+        fs.outputFile(fileLocation, html, function(err){
+          if(err) return next(err);
+          var phInstance;
+          var pageToPrint;
+          phantom.create()
+          .then(function(instance){
+            phInstance = instance;
+            return instance.createPage()
           })
-          pageToPrint = page;
-          return page.open(fileLocation);
-        })
-        .then(function(status){
-          console.log("STATUS: ", status)
-          var savedDate = Date.now();
-          var fileName = savedDate + '-guestlist.pdf'
-          var renderPath = path.join(__dirname, '../../../downloads/' + savedDate + '-guestlist.pdf');
+          .then(function(page){
+            page.property('paperSize', fileGenMethods.pdfPageSettings)
+            pageToPrint = page;
+            return page.open(fileLocation);
+          })
+          .then(function(status){
+            if(status === 'success'){
+              var savedDate = moment().format('YYMMDD-HHmmss');
+              var fileName = savedDate + '-' + fileGenMethods.generatePdfFileName(eventDetails.name) + '-guestlist.pdf';
+              var renderPath = path.join(__dirname, '../../../downloads/' + fileName);
 
-          pageToPrint.render(renderPath);
-          res.status(200).json({ assetPath: 'http://127.0.0.1:3000/downloads/' + fileName });
-
-          return renderPath;
+              pageToPrint.render(renderPath);
+              res.status(200).json({ assetPath: 'http://127.0.0.1:3000/downloads/' + fileName });
+              return true;
+            }
+          })
+          .then(function(created){
+            if(created){
+              pageToPrint.close();
+              phInstance.exit();
+            }
+          })
+          .catch(function(err){
+            console.log('ERROR FOUND: ', err);
+            phInstance.exit();
+          })
         })
-        .then(function(){
-
-        })
-        .catch(function(err){
-          console.log('ERROR FOUND: ', err);
-          phInstance.exit();
-        })
-      })
-    });
+      });
+    })
   })
 })
 

@@ -49,27 +49,6 @@ var attendeeGuestObj = function(dbObj){
   }
 }
 
-// attendeeGuestObj.prototype.generateGuestArray = function(){
-//   var guestArray = [];
-//   for(var field in this.attendeeObj){
-//     if((field !== 'registeredAttendee')){
-//       guestArray.push(this.attendeeObj[field]);
-//     }
-//   }
-//   this.guests = guestArray;
-//   return this;
-// }
-//
-// attendeeGuestObj.prototype.setregisteredAttendee = function(){
-//   this.registeredAttendee = this.attendeeObj.registeredAttendee;
-//   return this;
-// }
-//
-// attendeeGuestObj.prototype.setUserId = function(userId){
-//   this.uid = userId;
-//   return this;
-// }
-
 
 var guestListObjToArray = function(guestListObj, eventId){
   var guestListArray = [];
@@ -160,7 +139,7 @@ firebaseRefs.getEventGuests = function(eventId){
   })
   .then(function(guestListObj){
     return guestListObjToArray(guestListObj, eventId);
-  })
+  });
 }
 
 firebaseRefs.attendeeEventPaymentState = function(userId, evtId){
@@ -168,6 +147,14 @@ firebaseRefs.attendeeEventPaymentState = function(userId, evtId){
   .once('value')
   .then(function(snapshot){
     return snapshot.val() ? true : false;
+  })
+}
+
+firebaseRefs.getEventDetails = function(evtId){
+  return firebaseRefs.dbConnect('/events/' + evtId)
+  .once('value')
+  .then(function(snapshot){
+    return snapshot.val();
   })
 }
 
